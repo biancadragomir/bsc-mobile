@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">My Application</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_tab_navigation">TabNavigationActivity</string>
+    <string name="tab_text_1">Touch Feedback</string>
+    <string name="tab_text_2">FLoating Text</string>
+    <string name="materialText">In 2014, Google developed a new visual design language called Material Design for Android Lollipop and higher versions. The visual specifics in material design are amusing, and the material objects have x, y, and z dimensions, which allows you to create an incredible 3D world. Material Design is not about how to use dazzling colors, the best images, nor the elevation of the object; it is about how we create the amazing experience to users with the positive brand reality.\n\nGoogle has proposed some rules and regulations while adding Material Design to application to improvise its standards. Instead of using a palette selection tool that pulls colors to the content of an app, using Material Design makes the Android application’s graphic layout into a more simplified and standard format. To be noted, the material design is not only being used for rectangular or tablet screen; it should also be used for circular watch screen and other screens. So, if we create a grid, then it precepts all the spacing and should match to all the types of screens, which is a must for apps that are identified everywhere.</string>
+
+
+</resources>
