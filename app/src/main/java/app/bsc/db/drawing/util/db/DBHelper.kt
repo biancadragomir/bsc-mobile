@@ -1,4 +1,4 @@
-package app.bsc.db.drawing.util
+package app.bsc.db.drawing.util.db
 
 import android.content.ContentValues
 import android.content.Context
@@ -6,7 +6,10 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import app.bsc.db.drawing.model.Alarm
 
-class DBHelper(context:Context):SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VER){
+class DBHelper(context:Context):SQLiteOpenHelper(context,
+    DATABASE_NAME, null,
+    DATABASE_VER
+){
     companion object {
         private val DATABASE_NAME = "Alarms.db"
         private val DATABASE_VER = 1
@@ -37,7 +40,9 @@ class DBHelper(context:Context):SQLiteOpenHelper(context, DATABASE_NAME, null, D
             val cursor = db.rawQuery(SELECT_QUERY, null)
             if(cursor.moveToFirst()){
                 do {
-                    val Alarm = Alarm(cursor.getInt(cursor.getColumnIndex(COL_HOUR)), cursor.getInt(cursor.getColumnIndex(COL_MIN)))
+                    val Alarm = Alarm(cursor.getInt(cursor.getColumnIndex(COL_HOUR)), cursor.getInt(cursor.getColumnIndex(
+                        COL_MIN
+                    )))
                     lst_Alarms.add(Alarm)
                 }while (cursor.moveToNext())
             }

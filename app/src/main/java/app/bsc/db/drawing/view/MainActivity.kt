@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity() {
         adapter?.addFragment(ViewAlarmsFragment(), "VIEW ALARMS")
         viewPager.adapter = adapter
         tabLayout.setupWithViewPager(viewPager)
-
     }
 }
 

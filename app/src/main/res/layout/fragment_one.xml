@@ -1,21 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/min"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   xmlns:tools="http://schemas.android.com/tools"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="match_parent"
+                                                   android:background="@drawable/min"
+
 >
 
-    <TimePicker android:layout_width="wrap_content"
+
+        <TimePicker android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/timePicker"
+                    android:numbersTextColor="#000"
+                    android:headerTimeTextAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:headerBackground="@android:color/transparent"
+                    style="@android:style/Widget.Material.Light.TimePicker"
+                    android:visibility="visible"
+                    app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintEnd_toEndOf="parent" android:timePickerMode="clock">
+
+        </TimePicker>
+        <!--<Button-->
+        <!--android:text="ADD"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/button2"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/timePicker"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent"/>-->
+
+        <Button
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/timePicker"
-                android:numbersTextColor="#000"
+                android:text="OK"
+                android:id="@+id/btn_add"
+                app:layout_constraintTop_toBottomOf="@+id/timePicker"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent"
+                android:textColor="@color/white"
+        />
 
-
-                android:headerTimeTextAppearance="@style/TextAppearance.AppCompat.Display1"
-                android:headerBackground="@android:color/transparent"
-                style="@android:style/Widget.Material.Light.TimePicker" android:visibility="visible"
-    >
-
-    </TimePicker>
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
