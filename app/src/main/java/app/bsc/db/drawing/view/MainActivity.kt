@@ -1,8 +1,11 @@
-package app.bsc.db.drawing
+package app.bsc.db.drawing.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.viewpager.widget.ViewPager
+import app.bsc.db.drawing.R
+import app.bsc.db.drawing.view.alarms_management.CreateAlarmFragment
+import app.bsc.db.drawing.view.alarms_management.ViewAlarmsFragment
 import com.google.android.material.tabs.TabLayout
 
 class MainActivity : AppCompatActivity() {
@@ -18,8 +21,8 @@ class MainActivity : AppCompatActivity() {
         viewPager = findViewById(R.id.viewPager)
         tabLayout = findViewById(R.id.tabLayout)
         adapter = TabAdapter(supportFragmentManager)
-        adapter?.addFragment(Tab1Fragment(), "NEW")
-        adapter?.addFragment(Tab2Fragment(), "VIEW ALARMS")
+        adapter?.addFragment(CreateAlarmFragment(), "NEW ALARM")
+        adapter?.addFragment(ViewAlarmsFragment(), "VIEW ALARMS")
         viewPager.adapter = adapter
         tabLayout.setupWithViewPager(viewPager)
 

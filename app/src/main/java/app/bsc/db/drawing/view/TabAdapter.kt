@@ -1,4 +1,4 @@
-package app.bsc.db.drawing
+package app.bsc.db.drawing.view
 
 import android.util.Log
 import androidx.fragment.app.Fragment

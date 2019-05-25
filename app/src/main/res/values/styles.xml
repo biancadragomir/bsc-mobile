@@ -6,6 +6,8 @@
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorAccent">@color/primaryTextColor</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
     </style>
 
     <style name="AppTheme.Launcher">
@@ -15,7 +17,10 @@
     </style>
 
     <style name="MyToolbarTheme"
-           parent="@style/ThemeOverlay.AppCompat.Dark">
+           parent="@style/ThemeOverlay.AppCompat.Dark"
+    >
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
         <item name="colorControlNormal">@color/white</item>
         <item name="titleTextColor">@color/white</item>
     </style>
