@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         viewPager = findViewById(R.id.viewPager)
+        viewPager.setBackgroundResource(R.drawable.get);
         tabLayout = findViewById(R.id.tabLayout)
         adapter = TabAdapter(supportFragmentManager)
         adapter?.addFragment(CreateAlarmFragment(), "NEW ALARM")

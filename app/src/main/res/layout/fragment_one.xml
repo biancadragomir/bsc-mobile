@@ -2,21 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/get"
-
+                android:background="@drawable/min"
 >
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="Tab 1"
-            android:textSize="36sp" />
 
     <TimePicker android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/timePicker"
                 android:numbersTextColor="#000"
 
+
+                android:headerTimeTextAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:headerBackground="@android:color/transparent"
+                style="@android:style/Widget.Material.Light.TimePicker" android:visibility="visible"
     >
 
     </TimePicker>
