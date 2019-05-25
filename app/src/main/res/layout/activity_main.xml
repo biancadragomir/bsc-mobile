@@ -13,13 +13,17 @@
             app:tabGravity="fill"
             app:tabIndicatorColor="@color/white"
             app:tabIndicatorHeight="4dp"
-            app:tabBackground="@color/colorPrimary"
-            app:tabMode="fixed">
+            app:tabBackground="@color/primaryColor"
+            app:tabMode="fixed"
+            app:tabTextColor="@color/white"
+    >
     </com.google.android.material.tabs.TabLayout>
     <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:theme="@android:style/ThemeOverlay.Material.Dark"
+    >
     </androidx.viewpager.widget.ViewPager>
 </LinearLayout>
 

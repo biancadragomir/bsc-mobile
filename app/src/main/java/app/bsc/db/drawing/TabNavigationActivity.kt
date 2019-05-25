@@ -14,6 +14,9 @@ import androidx.appcompat.widget.Toolbar
 class TabNavigationActivity : AppCompatActivity() {
     private val listFragment = listOf(TouchFeedbackFragment(),FloatingTextFragment())
     private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tab_navigation)
