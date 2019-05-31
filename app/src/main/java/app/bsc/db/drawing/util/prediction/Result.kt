@@ -1,7 +1,5 @@
 package app.bsc.db.drawing.util.prediction
 
-
-
 class Result(probs: FloatArray, val timeCost: Long) {
 
     val number: Int

@@ -1,12 +1,10 @@
 <resources>
-    <string name="app_name">Drake Up</string>
+    <string name="app_name">Draw Asleep</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
     <string name="animal">Please draw a %1$s</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
 
 </resources>

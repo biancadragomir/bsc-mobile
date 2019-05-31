@@ -29,13 +29,6 @@ class MainActivity : AppCompatActivity() {
         viewPager.adapter = adapter
         tabLayout.setupWithViewPager(viewPager)
     }
-
-    fun getFpvIntent(): Intent{
-        val fpvIntent = Intent(this, FingerPaintView::class.java)
-        fpvIntent.putExtra("lock", true)
-        fpvIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        return fpvIntent
-    }
 }
 
 

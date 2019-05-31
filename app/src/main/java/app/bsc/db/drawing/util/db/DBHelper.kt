@@ -19,10 +19,11 @@ class DBHelper(context:Context):SQLiteOpenHelper(context,
         private val COL_ID = "ID"
         private val COL_HOUR = "Hour"
         private val COL_MIN = "Min"
+        private val COL_REQ_ID ="Req"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
-        val CREATE_TABLE_QUERY = ("CREATE TABLE  $TABLE_NAME ($COL_ID INTEGER, $COL_HOUR INTEGER, $COL_MIN INTEGER)")
+        val CREATE_TABLE_QUERY = ("CREATE TABLE  $TABLE_NAME ($COL_ID INTEGER, $COL_HOUR INTEGER, $COL_MIN INTEGER, $COL_REQ_ID INTEGER)")
         db!!.execSQL(CREATE_TABLE_QUERY)
     }
 
@@ -31,28 +32,30 @@ class DBHelper(context:Context):SQLiteOpenHelper(context,
         onCreate(db!!)
     }
 
-    // CRUD
     val allAlarms: ArrayList<Alarm>
         get(){
-            val lst_Alarms = ArrayList<Alarm>()
-            val SELECT_QUERY = "SELECT * FROM $TABLE_NAME"
+            val lstAlarms = ArrayList<Alarm>()
+            val selectQuery = "SELECT * FROM $TABLE_NAME"
             val db = this.writableDatabase
-            val cursor = db.rawQuery(SELECT_QUERY, null)
+            val cursor = db.rawQuery(selectQuery, null)
             if(cursor.moveToFirst()){
                 do {
-                    val Alarm = Alarm(cursor.getInt(cursor.getColumnIndex(COL_HOUR)), cursor.getInt(cursor.getColumnIndex(
-                        COL_MIN
-                    )))
-                    lst_Alarms.add(Alarm)
+                    val Alarm = Alarm(cursor.getInt(cursor.getColumnIndex(COL_HOUR)),
+                        cursor.getInt(cursor.getColumnIndex(COL_MIN)),
+                        cursor.getInt(cursor.getColumnIndex(COL_REQ_ID))
+                    )
+                    lstAlarms.add(Alarm)
                 }while (cursor.moveToNext())
             }
             db.close()
-            return lst_Alarms
+            cursor.close()
+            return lstAlarms
         }
 
     fun addAlarm( Alarm: Alarm ){
         val db = this.writableDatabase
         val values = ContentValues()
+
         values.put(COL_HOUR, Alarm.hour)
         values.put(COL_MIN, Alarm.minute)
 

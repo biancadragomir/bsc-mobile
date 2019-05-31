@@ -1,17 +1,14 @@
 package app.bsc.db.drawing.util.prediction
 
 import android.app.Activity
-import android.content.res.AssetFileDescriptor
 import android.graphics.Bitmap
 import android.os.SystemClock
 import android.util.Log
 
 import org.tensorflow.lite.Interpreter
-import java.io.FileDescriptor
 
 import java.io.FileInputStream
 import java.io.IOException
-import java.lang.Exception
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.MappedByteBuffer
