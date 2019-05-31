@@ -1,14 +1,17 @@
 package app.bsc.db.drawing.util.prediction
 
 import android.app.Activity
+import android.content.res.AssetFileDescriptor
 import android.graphics.Bitmap
 import android.os.SystemClock
 import android.util.Log
 
 import org.tensorflow.lite.Interpreter
+import java.io.FileDescriptor
 
 import java.io.FileInputStream
 import java.io.IOException
+import java.lang.Exception
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.MappedByteBuffer
@@ -58,17 +61,7 @@ constructor(activity: Activity) {
             return
         }
         mImageData.rewind()
-
-        println("doing stuff...")
-
-        //        bitmap.getScaledHeight(28);
-        //        bitmap.getScaledWidth(28);
-
-        println("*********************************************")
-        println(bitmap.width)
-
         bitmap.getPixels(mImagePixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
-//        bitmap.getPixels(mImagePixels, 0, bitmap.width, 0, 0, 28, 28)
 
         var pixel = 0
         for (i in 0 until IMG_WIDTH) {

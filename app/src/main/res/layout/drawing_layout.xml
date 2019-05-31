@@ -2,12 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
                                              xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
-                                             android:id="@+id/activity_main"
+                                             android:id="@+id/drawing_layout"
                                              android:layout_width="match_parent"
                                              android:layout_height="match_parent"
                                              tools:context=".view.DrawActivity">
 
-    <app.bsc.db.drawingrecognition.FingerPaintView
+    <app.bsc.db.drawing.util.paint.FingerPaintView
             android:id="@+id/fpv_paint"
             android:layout_width="363dp"
             android:layout_height="328dp"

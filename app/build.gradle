@@ -20,6 +20,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    aaptOptions {
+        noCompress "tflite"
+        noCompress "lite"
+    }
 }
 
 dependencies {
@@ -43,6 +47,11 @@ dependencies {
     implementation 'com.android.support:support-v4:28.1.0'
 
     implementation 'org.tensorflow:tensorflow-lite:1.13.1'
+
+    implementation 'com.jakewharton:butterknife:8.8.1'
+
+    implementation 'com.nex3z:finger-paint-view:0.1.0'
+
 
 //    implementation "com.google.android.material:material:1.0.0"
 }
