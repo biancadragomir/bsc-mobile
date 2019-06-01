@@ -56,7 +56,7 @@ class CreateAlarmFragment : Fragment() {
 
         val alarmObj = Alarm(timePicker.hour, timePicker.minute, requestCode)
         addAlarmToDb(alarmObj)
-        addAlarmToListView(alarmObj)
+        addAlarmToRecyclerView(alarmObj)
         requestCode++
 
         ViewAlarmsFragment.refreshData()
@@ -71,7 +71,7 @@ class CreateAlarmFragment : Fragment() {
         db.addAlarm(alarmObj)
     }
 
-    private fun addAlarmToListView(alarmObj: Alarm){
+    private fun addAlarmToRecyclerView(alarmObj: Alarm){
         // add to the list view
         ViewAlarmsFragment.addAlarm(alarmObj)
     }

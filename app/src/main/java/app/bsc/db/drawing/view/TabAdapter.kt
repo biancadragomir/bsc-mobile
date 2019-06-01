@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-
 import java.util.ArrayList
 
 class TabAdapter internal constructor(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
