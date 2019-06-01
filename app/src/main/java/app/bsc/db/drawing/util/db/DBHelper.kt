@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import app.bsc.db.drawing.model.Alarm
 
 class DBHelper(context:Context):SQLiteOpenHelper(context,
@@ -52,14 +53,23 @@ class DBHelper(context:Context):SQLiteOpenHelper(context,
             return lstAlarms
         }
 
-    fun addAlarm( Alarm: Alarm ){
+    fun addAlarm( alarm: Alarm ){
         val db = this.writableDatabase
         val values = ContentValues()
 
-        values.put(COL_HOUR, Alarm.hour)
-        values.put(COL_MIN, Alarm.minute)
+        values.put(COL_HOUR, alarm.hour)
+        values.put(COL_MIN, alarm.minute)
+        values.put(COL_REQ_ID, alarm.reqId)
 
         db.insert(TABLE_NAME, null, values)
+        Log.i("DBHelper: ", "added alarm with req id = " + alarm.reqId.toString())
+        db.close()
+    }
+
+    fun deleteAlarm( alarm: Alarm ){
+        val db = this.writableDatabase
+        db.delete(TABLE_NAME, "$COL_REQ_ID=?", arrayOf(alarm.reqId.toString()))
+        Log.i("DBHelper: ", "deleted alarm with req id = " + alarm.reqId.toString())
         db.close()
     }
 }

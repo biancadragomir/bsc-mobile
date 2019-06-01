@@ -11,23 +11,37 @@ import app.bsc.db.drawing.R
 import app.bsc.db.drawing.model.Alarm
 import java.util.ArrayList
 
-class AlarmsRecyclerAdapter(private val myDataset: ArrayList<Alarm>) :
-    RecyclerView.Adapter<AlarmsRecyclerAdapter.MyViewHolder>() {
+class AlarmsRecyclerAdapter(private val myDataset: ArrayList<Alarm>, onItemClickListener: OnItemClickListener) :
+                RecyclerView.Adapter<AlarmsRecyclerAdapter.MyViewHolder>() {
 
-    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    var currentDataset: ArrayList<Alarm>
+
+    var mOnItemClickListener: OnItemClickListener
+
+    init {
+        currentDataset = myDataset
+        mOnItemClickListener = onItemClickListener
+    }
+
+    interface OnItemClickListener{
+        fun onClick(position: Int)
+    }
+
+    class MyViewHolder(itemView: View, onItemClickListener: OnItemClickListener) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         var itemTitle: TextView
+
+        var onItemClickListener: OnItemClickListener
 
         init{
             itemTitle = itemView.findViewById(R.id.item_title)
-            itemView.setOnClickListener {
-                Log.i("myadapter", "setting card view onclick")
-            }
+
+            this.onItemClickListener = onItemClickListener
+            itemView.setOnClickListener(this)
+
         }
-    }
 
-    interface onItemClickListener{
-        fun onClick(position: Int){
-
+        override fun onClick(v: View?) {
+            onItemClickListener.onClick(adapterPosition)
         }
     }
 
@@ -36,30 +50,24 @@ class AlarmsRecyclerAdapter(private val myDataset: ArrayList<Alarm>) :
         val cardView= LayoutInflater.from(parent.context)
             .inflate(R.layout.list_item, parent, false) as CardView
 
-        val vh = MyViewHolder(cardView)
-
-        vh.itemView.setOnClickListener {
-            Log.i("isfhaisdd", "FINALLY WORKING!!!")
-        }
-
-        return vh
+        return MyViewHolder(cardView, mOnItemClickListener)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.itemTitle.text = myDataset[position].hour.toString()  + ":" + myDataset[position].minute.toString()
+        holder.itemTitle.text = currentDataset[position].hour.toString()  + ":" + currentDataset[position].minute.toString()
 
-
-
-
-        if(myDataset[position].minute.toString().length == 1){
-            holder.itemTitle.text = myDataset[position].hour.toString()  + ":0" + myDataset[position].minute.toString()
+        if(currentDataset[position].minute.toString().length == 1){
+            holder.itemTitle.text = currentDataset[position].hour.toString()  + ":0" + currentDataset[position].minute.toString()
         }else{
-            holder.itemTitle.text = myDataset[position].hour.toString()  + ":" + myDataset[position].minute.toString()
+            holder.itemTitle.text = currentDataset[position].hour.toString()  + ":" + currentDataset[position].minute.toString()
         }
-
-
     }
 
-    override fun getItemCount() = myDataset.size
+    override fun getItemCount() = currentDataset.size
 
+    fun setDataset(newDataset: ArrayList<Alarm>){
+        currentDataset = newDataset
+        Log.i("AlarmsAdapter", "Changed to new dataset. Current contents of currentDataset: ")
+        Log.i("AlarmsAdapter", currentDataset[currentDataset.size-1].toString())
+    }
 }

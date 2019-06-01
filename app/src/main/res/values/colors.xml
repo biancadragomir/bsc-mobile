@@ -12,4 +12,5 @@
 
     <color name="primaryTextColor">#ffffff</color>
     <color name="semiTransparentColor">#50ffffff</color>
+    <color name="notSoTransparentColor">#90ffffff</color>
 </resources>

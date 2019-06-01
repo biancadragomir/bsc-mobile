@@ -4,12 +4,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
-        android:clickable="true"
-        android:contextClickable="true"
         android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="10dp"
         card_view:cardElevation="0dp"
         card_view:cardBackgroundColor="@color/semiTransparentColor"
+        android:foreground="@drawable/ripple_card_view"
 >
     <!--card_view:cardBackgroundColor="@android:color/transparent"-->
 
@@ -17,7 +16,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:clickable="true"
     >
         <!--android:background="@drawable/grad"-->
 

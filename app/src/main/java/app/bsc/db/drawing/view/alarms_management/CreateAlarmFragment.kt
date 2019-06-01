@@ -12,7 +12,6 @@ import android.content.Intent
 import android.media.Ringtone
 import android.media.RingtoneManager
 import android.net.Uri
-import android.util.Log
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_one.*
 import java.util.*
@@ -59,9 +58,10 @@ class CreateAlarmFragment : Fragment() {
         addAlarmToRecyclerView(alarmObj)
         requestCode++
 
-        ViewAlarmsFragment.refreshData()
-        println(db.allAlarms)
-        Log.i("CreateAlarmFragment", "Refreshed after adding alarm!")
+        //TODO handle refresh process
+//        ViewAlarmsFragment.refreshData()
+//        println(db.allAlarms)
+//        Log.i("CreateAlarmFragment", "Refreshed after adding alarm!")
 
         Toast.makeText(activity, "Created alarm, supposedly", Toast.LENGTH_SHORT).show()
     }
