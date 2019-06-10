@@ -72,13 +72,13 @@ constructor(activity: Activity) {
     companion object {
         private val LOG_TAG = Classifier::class.java.simpleName
 
-        private val MODEL_NAME = "animals.tflite"
+        private val MODEL_NAME = "objects2.tflite"
 
         private val BATCH_SIZE = 1
         val IMG_HEIGHT = 28
         val IMG_WIDTH = 28
         private val NUM_CHANNEL = 1
-        private val NUM_CLASSES = 32
+        private val NUM_CLASSES = 15
 
         private fun convertPixel(color: Int): Float {
             return (255 - ((color shr 16 and 0xFF) * 0.299f

@@ -20,7 +20,7 @@
         <!--android:background="@drawable/grad"-->
 
         <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="187dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/item_title"
                 android:layout_alignParentTop="true"
@@ -34,7 +34,7 @@
         <TextView
                 android:text="One time"
                 android:fontFamily="sans-serif"
-                android:layout_width="wrap_content"
+                android:layout_width="124dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/item_detail"
                 android:layout_below="@+id/item_title"

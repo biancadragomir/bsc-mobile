@@ -15,16 +15,45 @@ import androidx.recyclerview.widget.RecyclerView
 import app.bsc.db.drawing.R
 import app.bsc.db.drawing.model.Alarm
 import app.bsc.db.drawing.util.db.DBHelper
+import app.bsc.db.drawing.view.DrawActivity
 import java.util.ArrayList
+import kotlin.math.log
 
-class ViewAlarmsFragment : Fragment(), AlarmsRecyclerAdapter.OnItemClickListener {
+interface MyListener {
+    fun updateView()
+    fun doDeleteActions(alarm: Alarm)
+}
+
+class ViewAlarmsFragment : Fragment(), AlarmsRecyclerAdapter.OnItemClickListener, MyListener {
+
+    override fun updateView() {
+        refreshData()
+    }
+
     companion object{
+        private val LOG_TAG = ViewAlarmsFragment::class.java.simpleName
+
         var recyclerView : RecyclerView? = null
 
         var alarmsList = ArrayList<Alarm>()
 
         fun addAlarm(alarm: Alarm){
             alarmsList.add(alarm)
+//            refreshData()
+        }
+
+        fun deleteAlarm(reqId: Int){
+            db!!.deleteAlarmById(reqId)
+
+            for(alarm: Alarm in alarmsList){
+                if(alarm.reqId == reqId){
+                    alarmsList.remove(alarm)
+                    Log.i(LOG_TAG, "alarm removed " + alarm.reqId)
+                }
+                break
+            }
+
+            // TODO also delete alarm from the recyclerview list
         }
 
         var db: DBHelper? = null
@@ -42,6 +71,9 @@ class ViewAlarmsFragment : Fragment(), AlarmsRecyclerAdapter.OnItemClickListener
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        CreateAlarmFragment.myListener = this
+        DrawActivity.myListener = this
+
         return inflater.inflate(R.layout.fragment_two, container, false)
     }
 
@@ -58,30 +90,35 @@ class ViewAlarmsFragment : Fragment(), AlarmsRecyclerAdapter.OnItemClickListener
         refreshData()
     }
 
+    fun cancelIntent(reqId: Int){
+        val intent = Intent(context, CreateAlarmFragment.AlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(context, reqId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        pendingIntent.cancel()
+    }
+
+    override fun doDeleteActions(alarm: Alarm){
+        db!!.deleteAlarm(alarm)
+        alarmsList.remove(alarm)
+    }
+
     override fun onClick(position: Int) {
         Log.i("ViewAlarmsFragment", "pressed on click!" + alarmsList[position].hour+ ":"+alarmsList[position].minute)
-        // Initialize a new instance of
+
         val builder = AlertDialog.Builder(context!!)
 
         builder.setTitle("Delete Alarm")
 
         builder.setMessage("Do you want to delete the alarm?")
 
-        // Set a positive button and its click listener on alert dialog
-        builder.setPositiveButton("YES"){dialog, which ->
+        builder.setPositiveButton("YES"){_, _->
 
-            val pendingIntent = PendingIntent.getBroadcast(context,
-                alarmsList[position].reqId, Intent(), PendingIntent.FLAG_UPDATE_CURRENT)
+            cancelIntent(alarmsList[position].reqId)
 
-            pendingIntent.cancel()
-
-            db!!.deleteAlarm(alarmsList[position])
-            alarmsList.remove(alarmsList[position])
+            doDeleteActions(alarmsList[position])
 
             Toast.makeText(context,"Successfully deleted alarm.",Toast.LENGTH_SHORT).show()
 
             refreshData()
-
         }
 
         builder.setNeutralButton("CANCEL"){_,_->

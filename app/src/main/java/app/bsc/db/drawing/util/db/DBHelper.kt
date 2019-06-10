@@ -21,6 +21,8 @@ class DBHelper(context:Context):SQLiteOpenHelper(context,
         private val COL_HOUR = "Hour"
         private val COL_MIN = "Min"
         private val COL_REQ_ID ="Req"
+
+        private val TAG = "DBHelper.kt"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -71,5 +73,25 @@ class DBHelper(context:Context):SQLiteOpenHelper(context,
         db.delete(TABLE_NAME, "$COL_REQ_ID=?", arrayOf(alarm.reqId.toString()))
         Log.i("DBHelper: ", "deleted alarm with req id = " + alarm.reqId.toString())
         db.close()
+    }
+
+    fun deleteAlarmById( reqId: Int ){
+        val db = this.writableDatabase
+        db.delete(TABLE_NAME, "$COL_REQ_ID=?", arrayOf(reqId.toString()))
+        Log.i("DBHelper: ", "deleted alarm with req id = " + reqId)
+        db.close()
+    }
+
+    fun getMaxReqId() : Int{
+        val db = this.writableDatabase
+        val cursor = (db!!.rawQuery("SELECT *\n" +
+                "FROM $TABLE_NAME\n" +
+                "ORDER BY $COL_REQ_ID DESC\n" +
+                "LIMIT 1", null))
+        var id = cursor.getColumnIndex("Req")
+        cursor.close()
+        id++
+        Log.i(TAG, "increased ID value => id is "+id)
+        return id
     }
 }
