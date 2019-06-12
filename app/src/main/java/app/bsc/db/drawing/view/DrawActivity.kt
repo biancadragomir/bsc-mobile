@@ -36,15 +36,19 @@ class DrawActivity : Activity() {
 //        "Snail", "Snake", "Spider", "Zebra"))
 
 
-        private val animalsCategories = ArrayList(Arrays.asList(
-             "Carrot",  "Cloud",  "Dog",
-    "Mushroom",  "Pants",  "Penguin", "Pillow",
-     "Snake", "Spider", "Stitches", "Table",
-    "Tooth", "Triangle",  "Vase", "Zigzag"))
+//        private val animalsCategories = ArrayList(Arrays.asList(
+//             "Carrot",  "Cloud",  "Dog",
+//    "Mushroom",  "Pants",  "Penguin", "Pillow",
+//     "Snake", "Spider", "Stitches", "Table",
+//    "Tooth", "Triangle",  "Vase", "Zigzag"))
 
+    private val animalsCategories = ArrayList(Arrays.asList(
+             "Apple",  "Banana",  "Pineapple", "Grapes"))
+
+    private val nrObj = animalsCategories.size
 
     private fun getRandomAnimal(): String{
-        val randomInteger = (0..14).shuffled().first()
+        val randomInteger = (0..(nrObj-1)).shuffled().first()
         return this.animalsCategories[randomInteger]
     }
     var animal: String? = null
