@@ -26,7 +26,7 @@ class DBHelper(context:Context):SQLiteOpenHelper(context,
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
-        val CREATE_TABLE_QUERY = ("CREATE TABLE  $TABLE_NAME ($COL_ID INTEGER, $COL_HOUR INTEGER, $COL_MIN INTEGER, $COL_REQ_ID INTEGER)")
+        val CREATE_TABLE_QUERY = ("CREATE TABLE  $TABLE_NAME ($COL_ID INTEGER, $COL_HOUR INTEGER, $COL_MIN INTEGER, $COL_REQ_ID INTEGER unique)")
         db!!.execSQL(CREATE_TABLE_QUERY)
     }
 
@@ -44,8 +44,8 @@ class DBHelper(context:Context):SQLiteOpenHelper(context,
             if(cursor.moveToFirst()){
                 do {
                     val Alarm = Alarm(cursor.getInt(cursor.getColumnIndex(COL_HOUR)),
-                        cursor.getInt(cursor.getColumnIndex(COL_MIN)),
-                        cursor.getInt(cursor.getColumnIndex(COL_REQ_ID))
+                                      cursor.getInt(cursor.getColumnIndex(COL_MIN)),
+                                      cursor.getInt(cursor.getColumnIndex(COL_REQ_ID))
                     )
                     lstAlarms.add(Alarm)
                 }while (cursor.moveToNext())
@@ -84,13 +84,20 @@ class DBHelper(context:Context):SQLiteOpenHelper(context,
 
     fun getMaxReqId() : Int{
         val db = this.writableDatabase
-        val cursor = (db!!.rawQuery("SELECT *\n" +
-                "FROM $TABLE_NAME\n" +
-                "ORDER BY $COL_REQ_ID DESC\n" +
-                "LIMIT 1", null))
-        var id = cursor.getColumnIndex("Req")
+//        val cursor = (db!!.rawQuery("SELECT *\n" +
+//                "FROM $TABLE_NAME\n" +
+//                "ORDER BY $COL_REQ_ID DESC\n" +
+//                "LIMIT 1", null))
+
+        val cursor = (db!!.rawQuery("SELECT Req FROM Alarm\n" +
+                "WHERE Req=(SELECT MAX(Req) from Alarm) order by Req desc limit 1;"
+                , null))
+
+        var id = 0
+        if(cursor.moveToFirst())
+            id = cursor.getInt(cursor.getColumnIndex(COL_REQ_ID))
         cursor.close()
-        id++
+//        id += 1
         Log.i(TAG, "increased ID value => id is "+id)
         return id
     }

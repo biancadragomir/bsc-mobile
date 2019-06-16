@@ -108,7 +108,7 @@ class ViewAlarmsFragment : Fragment(), AlarmsRecyclerAdapter.OnItemClickListener
 
         builder.setTitle("Delete Alarm")
 
-        builder.setMessage("Do you want to delete the alarm?")
+        builder.setMessage("Do you want to delete the alarm?" + alarmsList[position].reqId)
 
         builder.setPositiveButton("YES"){_, _->
 

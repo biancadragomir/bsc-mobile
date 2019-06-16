@@ -45,6 +45,7 @@ class CreateAlarmFragment : Fragment() {
 
         db = DBHelper(context!!)
         requestCode = db.getMaxReqId()
+
         Log.i(this.tag, "value of request code  ON VIEW CREATED --AFTER-- DB CALL FOR MAX is "+ requestCode.toString())
     }
 
@@ -53,9 +54,6 @@ class CreateAlarmFragment : Fragment() {
 
         val currentDate: Calendar = Calendar.getInstance()
         val calendar: Calendar = Calendar.getInstance()
-        Log.i(tag, "calendar --BEFORE-- time is " + calendar.time.toString())
-        Log.i(tag, "AND TIMEZONE: " + calendar.timeZone)
-
         calendar.
             apply {
             set(Calendar.HOUR_OF_DAY, timePicker.hour)
@@ -65,17 +63,15 @@ class CreateAlarmFragment : Fragment() {
 
         calendar.set(Calendar.MILLISECOND, 0)
 
-        //TODO uncomment the following two lines for preventing the alarm from ringing instantly due to being set in the past
-//        if(calendar.compareTo(currentDate) < 0)
-//             calendar.add(Calendar.DATE, 1)
+        if(calendar.compareTo(currentDate) < 0)
+             calendar.add(Calendar.DATE, 1)
 
-        Log.i(tag, "calendar time is " + calendar.time.toString())
+        requestCode += 1
 
-        val alarmObj = Alarm(timePicker.hour, timePicker.minute, ++requestCode)
-        Log.i("-", "alarm request code is "+alarmObj.reqId)
+        Log.i(tag, "creating alarm with requestCode = " + requestCode)
+        val alarmObj = Alarm(timePicker.hour, timePicker.minute, requestCode)
 
         val intent = Intent(context, AlarmReceiver::class.java)
-        Log.i("-", "new intent created")
 
         intent.putExtra("requestId", alarmObj.reqId)
 
@@ -90,7 +86,8 @@ class CreateAlarmFragment : Fragment() {
         else
             Toast.makeText(context, "Could not refresh alarms!", Toast.LENGTH_SHORT).show()
 
-        Toast.makeText(activity, "Created alarm, supposedly", Toast.LENGTH_SHORT).show()
+
+        Toast.makeText(activity, "Created alarm!", Toast.LENGTH_SHORT).show()
     }
 
     private fun addAlarmToDb(alarmObj: Alarm){
