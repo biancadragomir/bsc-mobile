@@ -43,7 +43,7 @@ class DrawActivity : Activity() {
 //    "Tooth", "Triangle",  "Vase", "Zigzag"))
 
     private val animalsCategories = ArrayList(Arrays.asList(
-             "Apple",  "Banana",  "Pineapple", "Grapes"))
+        "Apple", "Banana",  "Pineapple", "Pants", "Carrot", "Cup",  "Anvil",  "Bowtie", "Face", "Hand" ))
 
     private val nrObj = animalsCategories.size
 

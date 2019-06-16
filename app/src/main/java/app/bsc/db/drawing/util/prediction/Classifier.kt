@@ -73,8 +73,8 @@ constructor(activity: Activity) {
     companion object {
         private val LOG_TAG = Classifier::class.java.simpleName
 
-        private val MODEL_NAME = "objects10.tflite"
-        private val NUM_CLASSES = 4
+        private val MODEL_NAME = "convmodel14.tflite"
+        private val NUM_CLASSES = 10
 
         private val BATCH_SIZE = 1
         val IMG_HEIGHT = 28
