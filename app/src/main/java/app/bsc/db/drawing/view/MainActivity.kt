@@ -26,6 +26,8 @@ class MainActivity : AppCompatActivity() {
         adapter = TabAdapter(supportFragmentManager)
         adapter?.addFragment(CreateAlarmFragment(), "NEW ALARM")
         adapter?.addFragment(ViewAlarmsFragment(), "VIEW ALARMS")
+        adapter?.addFragment(EnterPlayMode(), "PLAY MODE")
+
         viewPager.adapter = adapter
         tabLayout.setupWithViewPager(viewPager)
     }

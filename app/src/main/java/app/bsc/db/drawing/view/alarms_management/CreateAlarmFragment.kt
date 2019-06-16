@@ -125,6 +125,7 @@ class CreateAlarmFragment : Fragment() {
             val fpvIntent = Intent(context, DrawActivity::class.java)
             fpvIntent.putExtra("requestId", id)
             fpvIntent.putExtra("lock", true)
+            fpvIntent.putExtra("playMode", false)
 
             fpvIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 

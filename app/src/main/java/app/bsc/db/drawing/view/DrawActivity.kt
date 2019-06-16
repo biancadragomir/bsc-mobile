@@ -20,9 +20,10 @@ import kotlinx.android.synthetic.main.drawing_layout.*
 import java.io.IOException
 import java.util.*
 
-class DrawActivity : Activity() {
+class DrawActivity (): Activity() {
     private var mclassifier: Classifier? = null
 
+    var inPlayMode: Boolean = false
     var mTxtPrediction: TextView? = null
     var mFpvPaint: FingerPaintView? = null
 
@@ -41,6 +42,7 @@ class DrawActivity : Activity() {
 //    "Mushroom",  "Pants",  "Penguin", "Pillow",
 //     "Snake", "Spider", "Stitches", "Table",
 //    "Tooth", "Triangle",  "Vase", "Zigzag"))
+
 
     private val animalsCategories = ArrayList(Arrays.asList(
         "Apple", "Banana",  "Pineapple", "Pants", "Carrot", "Cup",  "Anvil",  "Bowtie", "Face", "Hand" ))
@@ -62,6 +64,8 @@ class DrawActivity : Activity() {
         ViewAlarmsFragment.deleteAlarm(reqId)
         myListener!!.updateView()
 
+        inPlayMode = intent.getBooleanExtra("playMode", false)
+
         this.mFpvPaint = findViewById(R.id.fpv_paint) as app.bsc.db.drawing.util.paint.FingerPaintView
         this.mTxtPrediction = findViewById(R.id.txtPrediction)
 
@@ -73,7 +77,8 @@ class DrawActivity : Activity() {
         val mBtnAbort= findViewById<Button>(R.id.btnAbort)
         mBtnAbort.setOnClickListener {
             finish()
-            CreateAlarmFragment.AlarmReceiver.stopAlarmRinging()
+            if(!inPlayMode)
+                CreateAlarmFragment.AlarmReceiver.stopAlarmRinging()
             Toast.makeText(this, "Cancelled!", Toast.LENGTH_SHORT).show()
         }
 
@@ -88,6 +93,7 @@ class DrawActivity : Activity() {
     }
 
     private fun init() {
+
         try {
             mclassifier = Classifier(this)
         } catch (e: IOException) {
@@ -113,7 +119,8 @@ class DrawActivity : Activity() {
                 val result = this.mclassifier!!.classify(image)
 //                renderResult(result)
                 if(animalsCategories[result.number] == animal){
-                    CreateAlarmFragment.AlarmReceiver.stopAlarmRinging()
+                    if(!inPlayMode)
+                        CreateAlarmFragment.AlarmReceiver.stopAlarmRinging()
                     Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show()
                     finish()
                 }else{
