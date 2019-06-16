@@ -1,10 +1,13 @@
 <resources>
-    <string name="app_name">No more snoozing</string>
+    <string name="app_name">No More Snoozing</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
     <string name="animal">Please draw a %1$s</string>
+
+    <string name="daily">Daily</string>
+    <string name="one_time">One Time</string>
 
 </resources>

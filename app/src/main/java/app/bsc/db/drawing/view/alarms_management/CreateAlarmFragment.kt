@@ -14,6 +14,8 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
+import android.widget.ToggleButton
+import androidx.appcompat.app.AlertDialog
 import kotlinx.android.synthetic.main.fragment_one.*
 import java.util.*
 import app.bsc.db.drawing.R
@@ -30,6 +32,7 @@ class CreateAlarmFragment : Fragment() {
     }
 
     lateinit var db: DBHelper
+    var dailyAlarm = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Log.i(this.tag, "value of request code in ON CREATE VIEW is "+ requestCode.toString())
@@ -40,8 +43,39 @@ class CreateAlarmFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.i(this.tag, "value of request code  ON VIEW CREATED BEFORE DB CALL FOR MAX is "+ requestCode.toString())
         btn_add.setOnClickListener {
-            createAlarm()
+
+            val builder = AlertDialog.Builder(context!!)
+
+            builder.setTitle("Create Alarm")
+
+            builder.setMessage("Do you want the alarm to repeat?")
+
+            builder.setNegativeButton("NO"){_,_->
+                this.dailyAlarm = 0
+                Toast.makeText(context,"The alarm will repeat one time.",Toast.LENGTH_SHORT).show()
+                createAlarm()
+            }
+
+            builder.setPositiveButton("YES"){_, _->
+                Toast.makeText(context,"The alarm will repeat daily.",Toast.LENGTH_SHORT).show()
+                this.dailyAlarm = 1
+                createAlarm()
+            }
+
+            // Finally, make the alert dialog using builder
+            val dialog: AlertDialog = builder.create()
+
+            // Display the alert dialog on app interface
+            dialog.setCanceledOnTouchOutside(false)
+            dialog.setCancelable(false)
+            dialog.show()
+
         }
+
+
+//        switchDaily.setOnCheckedChangeListener { _, isChecked ->
+//            dailyAlarm = isChecked
+//        }
 
         db = DBHelper(context!!)
         requestCode = db.getMaxReqId()
@@ -69,14 +103,19 @@ class CreateAlarmFragment : Fragment() {
         requestCode += 1
 
         Log.i(tag, "creating alarm with requestCode = " + requestCode)
-        val alarmObj = Alarm(timePicker.hour, timePicker.minute, requestCode)
+        val alarmObj = Alarm(timePicker.hour, timePicker.minute, requestCode, dailyAlarm)
 
         val intent = Intent(context, AlarmReceiver::class.java)
 
         intent.putExtra("requestId", alarmObj.reqId)
+        intent.putExtra("daily", alarmObj.daily)
 
         val pendingIntent = PendingIntent.getBroadcast(context, alarmObj.reqId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+
+        if(this.dailyAlarm == 1)
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent)
+        else
+            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
 
         addAlarmToDb(alarmObj)
         addAlarmToRecyclerView(alarmObj)
@@ -86,8 +125,10 @@ class CreateAlarmFragment : Fragment() {
         else
             Toast.makeText(context, "Could not refresh alarms!", Toast.LENGTH_SHORT).show()
 
-
-        Toast.makeText(activity, "Created alarm!", Toast.LENGTH_SHORT).show()
+        if(dailyAlarm == 1)
+            Toast.makeText(activity, "Created daily alarm!", Toast.LENGTH_SHORT).show()
+        else
+            Toast.makeText(activity, "Created one time alarm!", Toast.LENGTH_SHORT).show()
     }
 
     private fun addAlarmToDb(alarmObj: Alarm){
@@ -118,11 +159,13 @@ class CreateAlarmFragment : Fragment() {
             ringtone!!.play()
 
             var id = intent.getIntExtra("requestId", -2)
+            val dailyStatus= intent.getIntExtra("daily", 0)
 
             val fpvIntent = Intent(context, DrawActivity::class.java)
             fpvIntent.putExtra("requestId", id)
             fpvIntent.putExtra("lock", true)
             fpvIntent.putExtra("playMode", false)
+            fpvIntent.putExtra("daily", dailyStatus)
 
             fpvIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 

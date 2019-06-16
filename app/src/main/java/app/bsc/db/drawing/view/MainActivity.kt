@@ -1,19 +1,20 @@
 package app.bsc.db.drawing.view
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.viewpager.widget.ViewPager
 import app.bsc.db.drawing.R
-import app.bsc.db.drawing.util.paint.FingerPaintView
 import app.bsc.db.drawing.view.alarms_management.CreateAlarmFragment
 import app.bsc.db.drawing.view.alarms_management.ViewAlarmsFragment
 import com.google.android.material.tabs.TabLayout
 
 class MainActivity : AppCompatActivity() {
 
+    companion object{
+        lateinit var viewPager: CustomViewPager
+    }
+
     private var adapter: TabAdapter? = null
-    private lateinit var viewPager: ViewPager
     private lateinit var tabLayout: TabLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,14 +22,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         viewPager = findViewById(R.id.viewPager)
-        viewPager.setBackgroundResource(R.drawable.get);
+        viewPager.setBackgroundResource(R.drawable.get)
         tabLayout = findViewById(R.id.tabLayout)
         adapter = TabAdapter(supportFragmentManager)
+
         adapter?.addFragment(CreateAlarmFragment(), "NEW ALARM")
         adapter?.addFragment(ViewAlarmsFragment(), "VIEW ALARMS")
-        adapter?.addFragment(EnterPlayMode(), "PLAY MODE")
+        adapter?.addFragment(DrawFragment(), "PLAY MODE")
 
         viewPager.adapter = adapter
+
         tabLayout.setupWithViewPager(viewPager)
     }
 }

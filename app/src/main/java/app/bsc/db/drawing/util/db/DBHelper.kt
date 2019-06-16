@@ -21,12 +21,13 @@ class DBHelper(context:Context):SQLiteOpenHelper(context,
         private val COL_HOUR = "Hour"
         private val COL_MIN = "Min"
         private val COL_REQ_ID ="Req"
+        private val COL_DAILY = "Daily"
 
         private val TAG = "DBHelper.kt"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
-        val CREATE_TABLE_QUERY = ("CREATE TABLE  $TABLE_NAME ($COL_ID INTEGER, $COL_HOUR INTEGER, $COL_MIN INTEGER, $COL_REQ_ID INTEGER unique)")
+        val CREATE_TABLE_QUERY = ("CREATE TABLE  $TABLE_NAME ($COL_ID INTEGER, $COL_HOUR INTEGER, $COL_MIN INTEGER, $COL_REQ_ID INTEGER unique, $COL_DAILY INTEGER)")
         db!!.execSQL(CREATE_TABLE_QUERY)
     }
 
@@ -45,7 +46,8 @@ class DBHelper(context:Context):SQLiteOpenHelper(context,
                 do {
                     val Alarm = Alarm(cursor.getInt(cursor.getColumnIndex(COL_HOUR)),
                                       cursor.getInt(cursor.getColumnIndex(COL_MIN)),
-                                      cursor.getInt(cursor.getColumnIndex(COL_REQ_ID))
+                                      cursor.getInt(cursor.getColumnIndex(COL_REQ_ID)),
+                                      cursor.getInt(cursor.getColumnIndex(COL_DAILY))
                     )
                     lstAlarms.add(Alarm)
                 }while (cursor.moveToNext())
@@ -62,6 +64,7 @@ class DBHelper(context:Context):SQLiteOpenHelper(context,
         values.put(COL_HOUR, alarm.hour)
         values.put(COL_MIN, alarm.minute)
         values.put(COL_REQ_ID, alarm.reqId)
+        values.put(COL_DAILY, alarm.daily)
 
         db.insert(TABLE_NAME, null, values)
         Log.i("DBHelper: ", "added alarm with req id = " + alarm.reqId.toString())

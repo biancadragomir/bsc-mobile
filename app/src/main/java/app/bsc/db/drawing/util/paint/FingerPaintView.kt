@@ -5,6 +5,7 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import app.bsc.db.drawing.view.MainActivity
 
 class FingerPaintView(
         context: Context,
@@ -35,6 +36,7 @@ class FingerPaintView(
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
+        MainActivity.viewPager.setPagingEnabled(false)
         if (event == null) return false
         isEmpty = false
         val x = event.x

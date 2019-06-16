@@ -10,6 +10,10 @@ class TabAdapter internal constructor(fm: FragmentManager) : FragmentStatePagerA
     private val mFragmentList = ArrayList<Fragment>()
     private val mFragmentTitleList = ArrayList<String>()
     override fun getItem(position: Int): Fragment {
+        if(position == 3)
+            MainActivity.viewPager.setPagingEnabled(false)
+        else
+            MainActivity.viewPager.setPagingEnabled(true)
         return mFragmentList[position]
     }
 

@@ -55,14 +55,21 @@ class DrawActivity (): Activity() {
     }
     var animal: String? = null
     var reqId = 0
+    var isDaily: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.drawing_layout)
 
         reqId = intent.getIntExtra("requestId", 0)
+
+        isDaily = intent.getIntExtra("daily", 0)
+
         Log.i(LOG_TAG, "The req id to delete is " + reqId)
-        ViewAlarmsFragment.deleteAlarm(reqId)
-        myListener!!.updateView()
+
+        if(isDaily == 0){
+            ViewAlarmsFragment.deleteAlarm(reqId)
+            myListener!!.updateView()
+        }
 
         inPlayMode = intent.getBooleanExtra("playMode", false)
 
