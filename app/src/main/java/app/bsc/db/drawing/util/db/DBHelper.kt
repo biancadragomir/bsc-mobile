@@ -87,10 +87,6 @@ class DBHelper(context:Context):SQLiteOpenHelper(context,
 
     fun getMaxReqId() : Int{
         val db = this.writableDatabase
-//        val cursor = (db!!.rawQuery("SELECT *\n" +
-//                "FROM $TABLE_NAME\n" +
-//                "ORDER BY $COL_REQ_ID DESC\n" +
-//                "LIMIT 1", null))
 
         val cursor = (db!!.rawQuery("SELECT Req FROM Alarm\n" +
                 "WHERE Req=(SELECT MAX(Req) from Alarm) order by Req desc limit 1;"

@@ -14,7 +14,6 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
-import android.widget.ToggleButton
 import androidx.appcompat.app.AlertDialog
 import kotlinx.android.synthetic.main.fragment_one.*
 import java.util.*
@@ -22,13 +21,11 @@ import app.bsc.db.drawing.R
 import app.bsc.db.drawing.model.Alarm
 import app.bsc.db.drawing.util.db.DBHelper
 import app.bsc.db.drawing.view.DrawActivity
-import java.sql.Date
-import java.time.DayOfWeek
 
 class CreateAlarmFragment : Fragment() {
     companion object{
         var requestCode: Int = 0
-        var myListener: MyListener? = null
+        var viewRefreshListener: ViewRefreshListener? = null
     }
 
     lateinit var db: DBHelper
@@ -52,12 +49,10 @@ class CreateAlarmFragment : Fragment() {
 
             builder.setNegativeButton("NO"){_,_->
                 this.dailyAlarm = 0
-                Toast.makeText(context,"The alarm will repeat one time.",Toast.LENGTH_SHORT).show()
                 createAlarm()
             }
 
             builder.setPositiveButton("YES"){_, _->
-                Toast.makeText(context,"The alarm will repeat daily.",Toast.LENGTH_SHORT).show()
                 this.dailyAlarm = 1
                 createAlarm()
             }
@@ -120,8 +115,8 @@ class CreateAlarmFragment : Fragment() {
         addAlarmToDb(alarmObj)
         addAlarmToRecyclerView(alarmObj)
 
-        if(myListener!=null)
-            myListener!!.updateView()
+        if(viewRefreshListener!=null)
+            viewRefreshListener!!.updateView()
         else
             Toast.makeText(context, "Could not refresh alarms!", Toast.LENGTH_SHORT).show()
 
@@ -164,14 +159,13 @@ class CreateAlarmFragment : Fragment() {
             val fpvIntent = Intent(context, DrawActivity::class.java)
             fpvIntent.putExtra("requestId", id)
             fpvIntent.putExtra("lock", true)
-            fpvIntent.putExtra("playMode", false)
             fpvIntent.putExtra("daily", dailyStatus)
 
             fpvIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
             context.startActivity(fpvIntent)
 
-            myListener!!.updateView()
+            viewRefreshListener!!.updateView()
 
         }
     }

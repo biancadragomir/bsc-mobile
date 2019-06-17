@@ -1,18 +1,18 @@
 package app.bsc.db.drawing.view
 
-import android.app.Activity
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import app.bsc.db.drawing.R
-import app.bsc.db.drawing.util.paint.FingerPaintView
+import app.bsc.db.drawing.view.paint.FingerPaintView
 import app.bsc.db.drawing.util.prediction.Classifier
 import app.bsc.db.drawing.util.prediction.Result
 import app.bsc.db.drawing.view.alarms_management.CreateAlarmFragment
-import app.bsc.db.drawing.view.alarms_management.MyListener
+import app.bsc.db.drawing.view.alarms_management.ViewRefreshListener
 import app.bsc.db.drawing.view.alarms_management.ViewAlarmsFragment
 import butterknife.ButterKnife
 import kotlinx.android.synthetic.main.drawing_layout.*
@@ -20,14 +20,13 @@ import kotlinx.android.synthetic.main.drawing_layout.*
 import java.io.IOException
 import java.util.*
 
-class DrawActivity (): Activity() {
+class DrawActivity (): AppCompatActivity() {
     private var mclassifier: Classifier? = null
 
-    var inPlayMode: Boolean = false
     var mTxtPrediction: TextView? = null
     var mFpvPaint: FingerPaintView? = null
 
-//    private val animalsCategories = ArrayList(Arrays.asList("Bat", "Bear", "Bee", "Bird",
+//    private val objectCategories = ArrayList(Arrays.asList("Bat", "Bear", "Bee", "Bird",
 //        "Butterfly", "Camel", "Cat", "Dog",
 //        "Dolphin", "Dragon", "Duck", "Elephant",
 //        "Flamingo", "Fish", "Hedgehog", "Horse",
@@ -37,23 +36,23 @@ class DrawActivity (): Activity() {
 //        "Snail", "Snake", "Spider", "Zebra"))
 
 
-//        private val animalsCategories = ArrayList(Arrays.asList(
+//        private val objectCategories = ArrayList(Arrays.asList(
 //             "Carrot",  "Cloud",  "Dog",
 //    "Mushroom",  "Pants",  "Penguin", "Pillow",
 //     "Snake", "Spider", "Stitches", "Table",
 //    "Tooth", "Triangle",  "Vase", "Zigzag"))
 
 
-    private val animalsCategories = ArrayList(Arrays.asList(
+    private val objectCategories = ArrayList(Arrays.asList(
         "Apple", "Banana",  "Pineapple", "Pants", "Carrot", "Cup",  "Anvil",  "Bowtie", "Face", "Hand" ))
 
-    private val nrObj = animalsCategories.size
+    private val nrObj = objectCategories.size
 
-    private fun getRandomAnimal(): String{
+    private fun getRandomObject(): String{
         val randomInteger = (0..(nrObj-1)).shuffled().first()
-        return this.animalsCategories[randomInteger]
+        return this.objectCategories[randomInteger]
     }
-    var animal: String? = null
+    var objectToDraw: String? = null
     var reqId = 0
     var isDaily: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,25 +67,24 @@ class DrawActivity (): Activity() {
 
         if(isDaily == 0){
             ViewAlarmsFragment.deleteAlarm(reqId)
-            myListener!!.updateView()
+            viewRefreshListener!!.updateView()
         }
 
-        inPlayMode = intent.getBooleanExtra("playMode", false)
-
-        this.mFpvPaint = findViewById(R.id.fpv_paint) as app.bsc.db.drawing.util.paint.FingerPaintView
+        this.mFpvPaint = findViewById(R.id.fpv_paint) as app.bsc.db.drawing.view.paint.FingerPaintView
         this.mTxtPrediction = findViewById(R.id.txtPrediction)
 
         val mBtnPredict = findViewById<Button>(R.id.btnPredict)
         mBtnPredict.setOnClickListener {
             this.onClick_btnPrediction()
+            MainActivity.viewPager.setPagingEnabled(true)
         }
 
         val mBtnAbort= findViewById<Button>(R.id.btnAbort)
         mBtnAbort.setOnClickListener {
             finish()
-            if(!inPlayMode)
-                CreateAlarmFragment.AlarmReceiver.stopAlarmRinging()
+            CreateAlarmFragment.AlarmReceiver.stopAlarmRinging()
             Toast.makeText(this, "Cancelled!", Toast.LENGTH_SHORT).show()
+            MainActivity.viewPager.setPagingEnabled(true)
         }
 
         ButterKnife.bind(this)
@@ -95,8 +93,8 @@ class DrawActivity (): Activity() {
         windowManager.defaultDisplay.getMetrics(metrics)
         init()
 
-        animal = getRandomAnimal()
-        txtPrediction.text = String.format(getString(R.string.animal), animal)
+        objectToDraw = getRandomObject()
+        txtPrediction.text = String.format(getString(R.string.strObjToDraw), objectToDraw)
     }
 
     private fun init() {
@@ -111,8 +109,8 @@ class DrawActivity (): Activity() {
     }
 
     private fun renderResult(result: Result) {
-        mTxtPrediction!!.text = animalsCategories[result.number]
-        println(animalsCategories[result.number])
+        mTxtPrediction!!.text = objectCategories[result.number]
+        println(objectCategories[result.number])
     }
 
     private fun onClick_btnPrediction() {
@@ -125,16 +123,15 @@ class DrawActivity (): Activity() {
             if(mclassifier!=null){
                 val result = this.mclassifier!!.classify(image)
 //                renderResult(result)
-                if(animalsCategories[result.number] == animal){
-                    if(!inPlayMode)
-                        CreateAlarmFragment.AlarmReceiver.stopAlarmRinging()
+                if(objectCategories[result.number] == objectToDraw){
+                    CreateAlarmFragment.AlarmReceiver.stopAlarmRinging()
                     Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show()
                     finish()
                 }else{
-                    Toast.makeText(this, "That's a " + animalsCategories[result.number] + ", try again!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Recognized: " + objectCategories[result.number] + ". Try again!", Toast.LENGTH_SHORT).show()
                     fpv_paint.clear()
-                    animal = getRandomAnimal()
-                    txtPrediction.text = String.format(getString(R.string.animal), animal)
+                    objectToDraw = getRandomObject()
+                    txtPrediction.text = String.format(getString(R.string.strObjToDraw), objectToDraw)
                 }
             }
         }
@@ -142,6 +139,6 @@ class DrawActivity (): Activity() {
 
     companion object {
         private val LOG_TAG = DrawActivity::class.java.simpleName
-        var myListener: MyListener? = null
+        var viewRefreshListener: ViewRefreshListener? = null
     }
 }

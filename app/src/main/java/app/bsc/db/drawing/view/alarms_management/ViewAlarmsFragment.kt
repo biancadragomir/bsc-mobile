@@ -17,14 +17,13 @@ import app.bsc.db.drawing.model.Alarm
 import app.bsc.db.drawing.util.db.DBHelper
 import app.bsc.db.drawing.view.DrawActivity
 import java.util.ArrayList
-import kotlin.math.log
 
-interface MyListener {
+interface ViewRefreshListener {
     fun updateView()
     fun doDeleteActions(alarm: Alarm)
 }
 
-class ViewAlarmsFragment : Fragment(), AlarmsRecyclerAdapter.OnItemClickListener, MyListener {
+class ViewAlarmsFragment : Fragment(), AlarmsRecyclerAdapter.OnItemClickListener, ViewRefreshListener {
 
     override fun updateView() {
         refreshData()
@@ -71,8 +70,8 @@ class ViewAlarmsFragment : Fragment(), AlarmsRecyclerAdapter.OnItemClickListener
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        CreateAlarmFragment.myListener = this
-        DrawActivity.myListener = this
+        CreateAlarmFragment.viewRefreshListener = this
+        DrawActivity.viewRefreshListener = this
 
         return inflater.inflate(R.layout.fragment_two, container, false)
     }
@@ -108,7 +107,7 @@ class ViewAlarmsFragment : Fragment(), AlarmsRecyclerAdapter.OnItemClickListener
 
         builder.setTitle("Delete Alarm")
 
-        builder.setMessage("Do you want to delete the alarm?" + alarmsList[position].reqId)
+        builder.setMessage("Do you want to delete the alarm?")
 
         builder.setPositiveButton("YES"){_, _->
 

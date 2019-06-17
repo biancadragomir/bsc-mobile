@@ -9,11 +9,10 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import app.bsc.db.drawing.R
 import app.bsc.db.drawing.model.Alarm
-import org.w3c.dom.Text
 import java.util.ArrayList
 
 class AlarmsRecyclerAdapter(private val myDataset: ArrayList<Alarm>, onItemClickListener: OnItemClickListener) :
-                RecyclerView.Adapter<AlarmsRecyclerAdapter.MyViewHolder>() {
+                RecyclerView.Adapter<AlarmsRecyclerAdapter.AlarmsViewHolder>() {
 
     var currentDataset: ArrayList<Alarm>
 
@@ -28,7 +27,7 @@ class AlarmsRecyclerAdapter(private val myDataset: ArrayList<Alarm>, onItemClick
         fun onClick(position: Int)
     }
 
-    class MyViewHolder(itemView: View, onItemClickListener: OnItemClickListener) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    class AlarmsViewHolder(itemView: View, onItemClickListener: OnItemClickListener) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         var itemTitle: TextView
         var itemDailyStatus: TextView
 
@@ -49,14 +48,14 @@ class AlarmsRecyclerAdapter(private val myDataset: ArrayList<Alarm>, onItemClick
     }
 
     override fun onCreateViewHolder(parent: ViewGroup,
-                                    viewType: Int): MyViewHolder {
+                                    viewType: Int): AlarmsViewHolder {
         val cardView= LayoutInflater.from(parent.context)
             .inflate(R.layout.list_item, parent, false) as CardView
 
-        return MyViewHolder(cardView, mOnItemClickListener)
+        return AlarmsViewHolder(cardView, mOnItemClickListener)
     }
 
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: AlarmsViewHolder, position: Int) {
         holder.itemTitle.text = currentDataset[position].hour.toString()  + ":" + currentDataset[position].minute.toString()
 
         if(currentDataset[position].daily == 1)
