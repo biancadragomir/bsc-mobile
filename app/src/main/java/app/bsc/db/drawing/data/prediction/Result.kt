@@ -1,4 +1,4 @@
-package app.bsc.db.drawing.util.prediction
+package app.bsc.db.drawing.data.prediction
 
 class Result(probs: FloatArray, val timeCost: Long) {
 

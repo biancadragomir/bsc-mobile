@@ -1,4 +1,4 @@
-package app.bsc.db.drawing.view.alarms_management
+package app.bsc.db.drawing.view.alarms
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -52,7 +52,10 @@ class AlarmsRecyclerAdapter(private val myDataset: ArrayList<Alarm>, onItemClick
         val cardView= LayoutInflater.from(parent.context)
             .inflate(R.layout.list_item, parent, false) as CardView
 
-        return AlarmsViewHolder(cardView, mOnItemClickListener)
+        return AlarmsViewHolder(
+            cardView,
+            mOnItemClickListener
+        )
     }
 
     override fun onBindViewHolder(holder: AlarmsViewHolder, position: Int) {

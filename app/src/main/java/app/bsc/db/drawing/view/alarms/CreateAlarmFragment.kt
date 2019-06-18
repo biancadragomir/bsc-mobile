@@ -1,4 +1,4 @@
-package app.bsc.db.drawing.view.alarms_management
+package app.bsc.db.drawing.view.alarms
 import android.app.AlarmManager
 import android.content.Context
 import android.os.Bundle
@@ -19,8 +19,8 @@ import kotlinx.android.synthetic.main.fragment_one.*
 import java.util.*
 import app.bsc.db.drawing.R
 import app.bsc.db.drawing.model.Alarm
-import app.bsc.db.drawing.util.db.DBHelper
-import app.bsc.db.drawing.view.DrawActivity
+import app.bsc.db.drawing.data.local.DBHelper
+import app.bsc.db.drawing.view.paint.DrawActivity
 
 class CreateAlarmFragment : Fragment() {
     companion object{
@@ -98,7 +98,8 @@ class CreateAlarmFragment : Fragment() {
         requestCode += 1
 
         Log.i(tag, "creating alarm with requestCode = " + requestCode)
-        val alarmObj = Alarm(timePicker.hour, timePicker.minute, requestCode, dailyAlarm)
+        val alarmObj = Alarm(timePicker.hour, timePicker.minute,
+            requestCode, dailyAlarm)
 
         val intent = Intent(context, AlarmReceiver::class.java)
 
@@ -115,7 +116,7 @@ class CreateAlarmFragment : Fragment() {
         addAlarmToDb(alarmObj)
         addAlarmToRecyclerView(alarmObj)
 
-        if(viewRefreshListener!=null)
+        if(viewRefreshListener !=null)
             viewRefreshListener!!.updateView()
         else
             Toast.makeText(context, "Could not refresh alarms!", Toast.LENGTH_SHORT).show()

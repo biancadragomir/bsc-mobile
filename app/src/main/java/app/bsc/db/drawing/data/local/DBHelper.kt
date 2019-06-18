@@ -1,4 +1,4 @@
-package app.bsc.db.drawing.util.db
+package app.bsc.db.drawing.data.local
 
 import android.content.ContentValues
 import android.content.Context
@@ -7,10 +7,11 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import app.bsc.db.drawing.model.Alarm
 
-class DBHelper(context:Context):SQLiteOpenHelper(context,
+class DBHelper(context: Context) : SQLiteOpenHelper(
+    context,
     DATABASE_NAME, null,
     DATABASE_VER
-){
+) {
     companion object {
         private val DATABASE_NAME = "Alarms.db"
         private val DATABASE_VER = 1
@@ -20,14 +21,15 @@ class DBHelper(context:Context):SQLiteOpenHelper(context,
         private val COL_ID = "ID"
         private val COL_HOUR = "Hour"
         private val COL_MIN = "Min"
-        private val COL_REQ_ID ="Req"
+        private val COL_REQ_ID = "Req"
         private val COL_DAILY = "Daily"
 
         private val TAG = "DBHelper.kt"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
-        val CREATE_TABLE_QUERY = ("CREATE TABLE  $TABLE_NAME ($COL_ID INTEGER, $COL_HOUR INTEGER, $COL_MIN INTEGER, $COL_REQ_ID INTEGER unique, $COL_DAILY INTEGER)")
+        val CREATE_TABLE_QUERY =
+            ("CREATE TABLE  $TABLE_NAME ($COL_ID INTEGER, $COL_HOUR INTEGER, $COL_MIN INTEGER, $COL_REQ_ID INTEGER unique, $COL_DAILY INTEGER)")
         db!!.execSQL(CREATE_TABLE_QUERY)
     }
 
@@ -37,27 +39,28 @@ class DBHelper(context:Context):SQLiteOpenHelper(context,
     }
 
     val allAlarms: ArrayList<Alarm>
-        get(){
+        get() {
             val lstAlarms = ArrayList<Alarm>()
             val selectQuery = "SELECT * FROM $TABLE_NAME"
             val db = this.writableDatabase
             val cursor = db.rawQuery(selectQuery, null)
-            if(cursor.moveToFirst()){
+            if (cursor.moveToFirst()) {
                 do {
-                    val Alarm = Alarm(cursor.getInt(cursor.getColumnIndex(COL_HOUR)),
-                                      cursor.getInt(cursor.getColumnIndex(COL_MIN)),
-                                      cursor.getInt(cursor.getColumnIndex(COL_REQ_ID)),
-                                      cursor.getInt(cursor.getColumnIndex(COL_DAILY))
+                    val Alarm = Alarm(
+                        cursor.getInt(cursor.getColumnIndex(COL_HOUR)),
+                        cursor.getInt(cursor.getColumnIndex(COL_MIN)),
+                        cursor.getInt(cursor.getColumnIndex(COL_REQ_ID)),
+                        cursor.getInt(cursor.getColumnIndex(COL_DAILY))
                     )
                     lstAlarms.add(Alarm)
-                }while (cursor.moveToNext())
+                } while (cursor.moveToNext())
             }
             db.close()
             cursor.close()
             return lstAlarms
         }
 
-    fun addAlarm( alarm: Alarm ){
+    fun addAlarm(alarm: Alarm) {
         val db = this.writableDatabase
         val values = ContentValues()
 
@@ -71,33 +74,35 @@ class DBHelper(context:Context):SQLiteOpenHelper(context,
         db.close()
     }
 
-    fun deleteAlarm( alarm: Alarm ){
+    fun deleteAlarm(alarm: Alarm) {
         val db = this.writableDatabase
         db.delete(TABLE_NAME, "$COL_REQ_ID=?", arrayOf(alarm.reqId.toString()))
         Log.i("DBHelper: ", "deleted alarm with req id = " + alarm.reqId.toString())
         db.close()
     }
 
-    fun deleteAlarmById( reqId: Int ){
+    fun deleteAlarmById(reqId: Int) {
         val db = this.writableDatabase
         db.delete(TABLE_NAME, "$COL_REQ_ID=?", arrayOf(reqId.toString()))
         Log.i("DBHelper: ", "deleted alarm with req id = " + reqId)
         db.close()
     }
 
-    fun getMaxReqId() : Int{
+    fun getMaxReqId(): Int {
         val db = this.writableDatabase
 
-        val cursor = (db!!.rawQuery("SELECT Req FROM Alarm\n" +
-                "WHERE Req=(SELECT MAX(Req) from Alarm) order by Req desc limit 1;"
-                , null))
+        val cursor = (db!!.rawQuery(
+            "SELECT Req FROM Alarm\n" +
+                    "WHERE Req=(SELECT MAX(Req) from Alarm) order by Req desc limit 1;"
+            , null
+        ))
 
         var id = 0
-        if(cursor.moveToFirst())
+        if (cursor.moveToFirst())
             id = cursor.getInt(cursor.getColumnIndex(COL_REQ_ID))
         cursor.close()
 //        id += 1
-        Log.i(TAG, "increased ID value => id is "+id)
+        Log.i(TAG, "increased ID value => id is " + id)
         return id
     }
 }

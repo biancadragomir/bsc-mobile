@@ -5,7 +5,7 @@
                                              android:id="@+id/drawing_layout"
                                              android:layout_width="match_parent"
                                              android:layout_height="match_parent"
-                                             tools:context=".view.DrawActivity"
+                                             tools:context=".view.paint.DrawActivity"
                                             android:background="@drawable/min3"
 >
 
@@ -35,7 +35,9 @@
             android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginStart="8dp"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/notSoTransparentColor"
-    />
+            android:padding="10dp"
+            android:layout_margin="10dp"
+            app:layout_constraintVertical_bias="0.325"/>
 
 
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"

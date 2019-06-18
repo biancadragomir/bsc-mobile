@@ -1,4 +1,4 @@
-package app.bsc.db.drawing.view
+package app.bsc.db.drawing.view.paint
 
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -8,12 +8,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import app.bsc.db.drawing.R
-import app.bsc.db.drawing.view.paint.FingerPaintView
-import app.bsc.db.drawing.util.prediction.Classifier
-import app.bsc.db.drawing.util.prediction.Result
-import app.bsc.db.drawing.view.alarms_management.CreateAlarmFragment
-import app.bsc.db.drawing.view.alarms_management.ViewRefreshListener
-import app.bsc.db.drawing.view.alarms_management.ViewAlarmsFragment
+import app.bsc.db.drawing.data.prediction.Classifier
+import app.bsc.db.drawing.data.prediction.Result
+import app.bsc.db.drawing.view.alarms.CreateAlarmFragment
+import app.bsc.db.drawing.view.MainActivity
+import app.bsc.db.drawing.view.alarms.ViewAlarmsFragment
+import app.bsc.db.drawing.view.alarms.ViewRefreshListener
 import butterknife.ButterKnife
 import kotlinx.android.synthetic.main.drawing_layout.*
 
@@ -70,7 +70,7 @@ class DrawActivity (): AppCompatActivity() {
             viewRefreshListener!!.updateView()
         }
 
-        this.mFpvPaint = findViewById(R.id.fpv_paint) as app.bsc.db.drawing.view.paint.FingerPaintView
+        this.mFpvPaint = findViewById(R.id.fpv_paint) as FingerPaintView
         this.mTxtPrediction = findViewById(R.id.txtPrediction)
 
         val mBtnPredict = findViewById<Button>(R.id.btnPredict)

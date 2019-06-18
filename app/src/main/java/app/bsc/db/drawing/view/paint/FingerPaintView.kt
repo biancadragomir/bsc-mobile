@@ -5,18 +5,8 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import app.bsc.db.drawing.view.MainActivity
-import android.media.MediaScannerConnection
 import android.graphics.Bitmap
-import android.net.Uri
-import android.os.Environment
-import java.nio.file.Files.delete
-import java.nio.file.Files.exists
-import android.os.Environment.DIRECTORY_PICTURES
-import android.os.Environment.getExternalStoragePublicDirectory
-import android.util.Log
-import java.io.File
-import java.io.FileOutputStream
+import app.bsc.db.drawing.view.MainActivity
 
 
 class FingerPaintView(
@@ -144,7 +134,4 @@ class FingerPaintView(
             this.strokeWidth = PEN_SIZE
         }
     }
-
-
-
 }

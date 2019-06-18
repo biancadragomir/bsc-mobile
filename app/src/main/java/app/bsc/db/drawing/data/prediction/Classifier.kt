@@ -1,4 +1,4 @@
-package app.bsc.db.drawing.util.prediction
+package app.bsc.db.drawing.data.prediction
 
 import android.app.Activity
 import android.graphics.Bitmap
@@ -27,7 +27,8 @@ constructor(activity: Activity) {
     init {
         mInterpreter = Interpreter(loadModelFile(activity), options)
         mImageData = ByteBuffer.allocateDirect(
-                4 * BATCH_SIZE * IMG_HEIGHT * IMG_WIDTH * NUM_CHANNEL)
+                4 * BATCH_SIZE * IMG_HEIGHT * IMG_WIDTH * NUM_CHANNEL
+        )
         mImageData!!.order(ByteOrder.nativeOrder())
     }
 
@@ -37,7 +38,8 @@ constructor(activity: Activity) {
         mInterpreter.run(mImageData, mResult)
         val endTime = SystemClock.uptimeMillis()
         val timeCost = endTime - startTime
-        Log.v(LOG_TAG, "classify(): result = " + Arrays.toString(mResult[0])
+        Log.v(
+            LOG_TAG, "classify(): result = " + Arrays.toString(mResult[0])
                 + ", timeCost = " + timeCost)
 
         return Result(mResult[0], timeCost)

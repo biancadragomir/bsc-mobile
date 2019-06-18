@@ -1,4 +1,4 @@
-package app.bsc.db.drawing.view.alarms_management
+package app.bsc.db.drawing.view.alarms
 
 import android.app.PendingIntent
 import android.content.Intent
@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.bsc.db.drawing.R
 import app.bsc.db.drawing.model.Alarm
-import app.bsc.db.drawing.util.db.DBHelper
-import app.bsc.db.drawing.view.DrawActivity
+import app.bsc.db.drawing.data.local.DBHelper
+import app.bsc.db.drawing.view.paint.DrawActivity
 import java.util.ArrayList
 
 interface ViewRefreshListener {
@@ -23,7 +23,9 @@ interface ViewRefreshListener {
     fun doDeleteActions(alarm: Alarm)
 }
 
-class ViewAlarmsFragment : Fragment(), AlarmsRecyclerAdapter.OnItemClickListener, ViewRefreshListener {
+class ViewAlarmsFragment : Fragment(),
+    AlarmsRecyclerAdapter.OnItemClickListener,
+    ViewRefreshListener {
 
     override fun updateView() {
         refreshData()
@@ -65,7 +67,10 @@ class ViewAlarmsFragment : Fragment(), AlarmsRecyclerAdapter.OnItemClickListener
         alarmsList = db!!.allAlarms
 //        (recyclerView!!.adapter as AlarmsRecyclerAdapter).setDataset(alarmsList)
 
-        val adapter = AlarmsRecyclerAdapter(alarmsList, this)
+        val adapter = AlarmsRecyclerAdapter(
+            alarmsList,
+            this
+        )
             recyclerView!!.adapter = adapter
     }
 
@@ -82,7 +87,10 @@ class ViewAlarmsFragment : Fragment(), AlarmsRecyclerAdapter.OnItemClickListener
         recyclerView = view.findViewById(R.id.recyclerViewAlarms)
         recyclerView!!.apply {
             layoutManager = LinearLayoutManager(this@ViewAlarmsFragment.context)
-            adapter = AlarmsRecyclerAdapter(alarmsList, this@ViewAlarmsFragment)
+            adapter = AlarmsRecyclerAdapter(
+                alarmsList,
+                this@ViewAlarmsFragment
+            )
         }
 
         db = DBHelper(context!!)
@@ -101,7 +109,7 @@ class ViewAlarmsFragment : Fragment(), AlarmsRecyclerAdapter.OnItemClickListener
     }
 
     override fun onClick(position: Int) {
-        Log.i("ViewAlarmsFragment", "pressed on click!" + alarmsList[position].hour+ ":"+alarmsList[position].minute)
+        Log.i("ViewAlarmsFragment", "pressed on click!" + alarmsList[position].hour+ ":"+ alarmsList[position].minute)
 
         val builder = AlertDialog.Builder(context!!)
 

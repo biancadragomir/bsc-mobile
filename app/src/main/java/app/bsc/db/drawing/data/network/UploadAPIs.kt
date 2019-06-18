@@ -1,4 +1,4 @@
-package app.bsc.db.drawing
+package app.bsc.db.drawing.data.network
 
 import okhttp3.MultipartBody
 import okhttp3.RequestBody

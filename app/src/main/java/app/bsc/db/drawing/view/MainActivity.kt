@@ -3,17 +3,18 @@ package app.bsc.db.drawing.view
 import android.Manifest
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import app.bsc.db.drawing.view.alarms_management.CreateAlarmFragment
-import app.bsc.db.drawing.view.alarms_management.ViewAlarmsFragment
 import com.google.android.material.tabs.TabLayout
 import androidx.core.app.ActivityCompat
 import android.content.pm.PackageManager
 import android.app.Activity
 import app.bsc.db.drawing.R
+import app.bsc.db.drawing.view.alarms.CreateAlarmFragment
+import app.bsc.db.drawing.view.alarms.ViewAlarmsFragment
+import app.bsc.db.drawing.view.paint.DrawFragment
 
 class MainActivity : AppCompatActivity() {
 
-    companion object{
+    companion object {
         lateinit var viewPager: CustomViewPager
     }
 

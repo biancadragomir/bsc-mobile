@@ -22,10 +22,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".view.DrawActivity"
+        <activity android:name=".view.paint.DrawActivity"
                   android:screenOrientation="portrait"
         />
-        <receiver android:name=".view.alarms_management.CreateAlarmFragment$AlarmReceiver">
+        <receiver android:name=".view.alarms.CreateAlarmFragment$AlarmReceiver">
         </receiver>
     </application>
 
