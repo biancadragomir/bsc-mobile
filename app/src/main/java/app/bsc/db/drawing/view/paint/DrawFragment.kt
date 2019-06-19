@@ -16,7 +16,7 @@ import app.bsc.db.drawing.data.network.NetworkClient
 import app.bsc.db.drawing.data.network.NetworkConnectionChecker
 import app.bsc.db.drawing.data.network.UploadAPIs
 import app.bsc.db.drawing.data.prediction.Classifier
-import app.bsc.db.drawing.view.MainActivity
+import app.bsc.db.drawing.view.main.MainActivity
 import kotlinx.android.synthetic.main.drawing_layout.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -149,7 +149,7 @@ class DrawFragment : Fragment() {
 
         try {
             val out = FileOutputStream(file)
-            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
+            finalBitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
 
             out.flush()
             out.close()
@@ -200,11 +200,15 @@ class DrawFragment : Fragment() {
         val call = uploadAPIs.uploadImage(part, description)
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                var predictionResultServer = response.body()!!.string().substringAfter(':')
-                predictionResultServer = predictionResultServer.substringAfter('"')
-                predictionResultServer = predictionResultServer.substringBefore('"')
-                Log.i("Retrofit success: ", predictionResultServer)
-                Toast.makeText(context, "Server result: " + predictionResultServer, Toast.LENGTH_SHORT).show()
+                if(response.body()!=null){
+                    var predictionResultServer = response.body()!!.string().substringAfter(':')
+                    predictionResultServer = predictionResultServer.substringAfter('"')
+                    predictionResultServer = predictionResultServer.substringBefore('"')
+                    Log.i("Retrofit success: ", predictionResultServer)
+                    Toast.makeText(context, "Server result: " + predictionResultServer, Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(context, "There's a problem!", Toast.LENGTH_SHORT).show()
+                }
             }
 
             override fun onFailure(call: Call<ResponseBody>, throwable: Throwable) {

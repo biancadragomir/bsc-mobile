@@ -6,7 +6,13 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.graphics.Bitmap
-import app.bsc.db.drawing.view.MainActivity
+import android.nfc.Tag
+import android.os.Environment
+import android.util.Log
+import android.widget.Toast
+import app.bsc.db.drawing.view.main.MainActivity
+import java.io.File
+import java.io.FileOutputStream
 
 
 class FingerPaintView(
@@ -76,7 +82,7 @@ class FingerPaintView(
         invalidate()
     }
 
-    fun exportToBitmap(): Bitmap {
+    private fun exportToBitmap(): Bitmap {
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         val bgDrawable = background
@@ -86,6 +92,7 @@ class FingerPaintView(
             canvas.drawColor(Color.BLACK)
         }
         draw(canvas)
+
         return bitmap
     }
 
@@ -121,7 +128,7 @@ class FingerPaintView(
 
     companion object {
         private const val TOUCH_TOLERANCE = 4f
-        private const val PEN_SIZE = 15f
+        private const val PEN_SIZE = 60f
 
         @JvmStatic
         private fun buildDefaultPen(): Paint = Paint().apply {

@@ -11,7 +11,7 @@ import app.bsc.db.drawing.R
 import app.bsc.db.drawing.data.prediction.Classifier
 import app.bsc.db.drawing.data.prediction.Result
 import app.bsc.db.drawing.view.alarms.CreateAlarmFragment
-import app.bsc.db.drawing.view.MainActivity
+import app.bsc.db.drawing.view.main.MainActivity
 import app.bsc.db.drawing.view.alarms.ViewAlarmsFragment
 import app.bsc.db.drawing.view.alarms.ViewRefreshListener
 import butterknife.ButterKnife

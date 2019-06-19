@@ -1,4 +1,4 @@
-package app.bsc.db.drawing.view
+package app.bsc.db.drawing.view.main
 
 import android.Manifest
 import androidx.appcompat.app.AppCompatActivity

@@ -14,7 +14,7 @@
             android:screenOrientation="portrait"
             android:supportsRtl="true"
             android:theme="@style/AppTheme.Launcher">
-        <activity android:name=".view.MainActivity"
+        <activity android:name=".view.main.MainActivity"
                   android:screenOrientation="portrait"
         >
             <intent-filter>

@@ -19,20 +19,12 @@
     >
     </com.google.android.material.tabs.TabLayout>
 
-    <!--<androidx.viewpager.widget.ViewPager-->
-            <!--android:id="@+id/viewPager"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:theme="@android:style/ThemeOverlay.Material.Dark"-->
-    <!--&gt;-->
-    <!--</androidx.viewpager.widget.ViewPager>-->
-
-    <app.bsc.db.drawing.view.CustomViewPager
+    <app.bsc.db.drawing.view.main.CustomViewPager
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:theme="@android:style/ThemeOverlay.Material.Dark"
     >
-    </app.bsc.db.drawing.view.CustomViewPager>
+    </app.bsc.db.drawing.view.main.CustomViewPager>
 
 </LinearLayout>
