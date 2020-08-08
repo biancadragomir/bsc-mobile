@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+                                             android:id="@+id/drawing_layout_fragment"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             tools:context=".view.paint.DrawActivity"
+                                            android:background="@drawable/min3"
+>
+
+    <app.bsc.db.drawing.view.paint.FingerPaintView
+            android:id="@+id/fpv_paint_fragment"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@color/notSoTransparentColor"
+            android:layout_margin="30dp"
+            android:padding="30dp"
+    />
+
+    <TextView
+            android:text="Prediction will appear here"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true" android:id="@+id/txtPredictionFragment"
+            android:layout_marginBottom="8dp" android:textSize="30sp"
+            android:layout_alignParentTop="true" app:layout_constraintBottom_toTopOf="@+id/transition_container"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/fpv_paint_fragment"
+            android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textColor="@color/notSoTransparentColor"
+            android:padding="10dp"
+            android:layout_margin="10dp"
+            app:layout_constraintVertical_bias="0.325"
+
+    />
+
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:orientation="horizontal"
+                  android:layout_alignParentBottom="true" android:layout_marginTop="8dp"
+                  app:layout_constraintTop_toBottomOf="@+id/fpv_paint_fragment" android:layout_marginBottom="8dp"
+                  app:layout_constraintBottom_toBottomOf="parent" android:id="@+id/transition_container"
+                android:padding="20dp"
+    >
+
+        <Button
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:text="Close"
+                android:id="@+id/btnPredictFragment"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginRight="20dp"
+                android:textColor="#000"
+
+        />
+        <!--android:background="@color/semiTransparentColor"-->
+
+        <Button
+                android:text="Abort"
+                android:id="@+id/btnAbortFragment"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_weight="1"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:textColor="#000"
+        />
+
+    </LinearLayout>
+
+    <!--android:background="@color/semiTransparentColor"-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,8 +8,14 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 
+/**
+ * Used for uploading the image to the server
+ */
 interface UploadAPIs {
     @Multipart
     @POST("/")
-    fun uploadImage(@Part file: MultipartBody.Part,  @Part("name") requestBody: RequestBody): Call<ResponseBody>
+    fun uploadImage(
+        @Part file: MultipartBody.Part,
+        @Part("name") requestBody: RequestBody
+    ): Call<ResponseBody>
 }

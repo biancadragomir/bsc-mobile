@@ -4,19 +4,19 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.bsc.db.drawing.R
-import app.bsc.db.drawing.model.Alarm
 import app.bsc.db.drawing.data.local.DBHelper
+import app.bsc.db.drawing.model.Alarm
 import app.bsc.db.drawing.view.paint.DrawActivity
-import java.util.ArrayList
+import java.util.*
 
 interface ViewRefreshListener {
     fun updateView()
@@ -31,50 +31,50 @@ class ViewAlarmsFragment : Fragment(),
         refreshData()
     }
 
-    companion object{
+    companion object {
         private val LOG_TAG = ViewAlarmsFragment::class.java.simpleName
 
-        var recyclerView : RecyclerView? = null
+        var recyclerView: RecyclerView? = null
 
         var alarmsList = ArrayList<Alarm>()
 
-        fun addAlarm(alarm: Alarm){
+        fun addAlarm(alarm: Alarm) {
             alarmsList.add(alarm)
-//            refreshData()
         }
 
-        fun deleteAlarm(reqId: Int){
+        fun deleteAlarm(reqId: Int) {
             db!!.deleteAlarmById(reqId)
 
-            for(alarm: Alarm in alarmsList){
-                if(alarm.reqId == reqId){
+            for (alarm: Alarm in alarmsList) {
+                if (alarm.reqId == reqId) {
                     alarmsList.remove(alarm)
-                    Log.i(LOG_TAG, "alarm removed " + alarm.reqId)
+                    Log.i(LOG_TAG, "Alarm removed from list: " + alarm.reqId)
                 }
                 break
             }
-
-            // TODO also delete alarm from the recyclerview list
         }
 
         var db: DBHelper? = null
 
     }
 
-    fun refreshData() {
+    private fun refreshData() {
         Log.i("ViewAlarmsFragment", "refreshData() was called")
 
         alarmsList = db!!.allAlarms
-//        (recyclerView!!.adapter as AlarmsRecyclerAdapter).setDataset(alarmsList)
 
         val adapter = AlarmsRecyclerAdapter(
             alarmsList,
             this
         )
-            recyclerView!!.adapter = adapter
+        recyclerView!!.adapter = adapter
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         CreateAlarmFragment.viewRefreshListener = this
         DrawActivity.viewRefreshListener = this
 
@@ -97,46 +97,51 @@ class ViewAlarmsFragment : Fragment(),
         refreshData()
     }
 
-    fun cancelIntent(reqId: Int){
+    private fun cancelIntent(reqId: Int) {
         val intent = Intent(context, CreateAlarmFragment.AlarmReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(context, reqId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent =
+            PendingIntent.getBroadcast(context, reqId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         pendingIntent.cancel()
     }
 
-    override fun doDeleteActions(alarm: Alarm){
+    override fun doDeleteActions(alarm: Alarm) {
         db!!.deleteAlarm(alarm)
         alarmsList.remove(alarm)
     }
 
     override fun onClick(position: Int) {
-        Log.i("ViewAlarmsFragment", "pressed on click!" + alarmsList[position].hour+ ":"+ alarmsList[position].minute)
-
         val builder = AlertDialog.Builder(context!!)
 
-        builder.setTitle("Delete Alarm")
+        builder.setTitle(getString(R.string.delete_alarm))
 
-        builder.setMessage("Do you want to delete the alarm?")
+        builder.setMessage(getString(R.string.delete_alarm_confirmation_message))
 
-        builder.setPositiveButton("YES"){_, _->
+        builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
 
             cancelIntent(alarmsList[position].reqId)
 
             doDeleteActions(alarmsList[position])
 
-            Toast.makeText(context,"Successfully deleted alarm.",Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                getString(R.string.delete_alarm_confirmation),
+                Toast.LENGTH_SHORT
+            ).show()
 
             refreshData()
         }
 
-        builder.setNeutralButton("CANCEL"){_,_->
+        builder.setNeutralButton(getString(R.string.cancel)) { _, _ ->
             // Do something when user press the positive button
-            Toast.makeText(context,"Cancelled deletion",Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                getString(R.string.cancelled_deletion_confirmation),
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
-        // Finally, make the alert dialog using builder
         val dialog: AlertDialog = builder.create()
 
-        // Display the alert dialog on app interface
         dialog.show()
     }
 }

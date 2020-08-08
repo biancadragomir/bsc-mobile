@@ -9,5 +9,20 @@
 
     <string name="daily">Daily</string>
     <string name="one_time">One Time</string>
+    <string name="refresh_alarms_failure">Could not refresh alarms!</string>
+    <string name="daily_alarm_confirmation">Created daily alarm!</string>
+    <string name="one_time_alarm_confirmation">Created one time alarm!</string>
+    <string name="delete_alarm">Delete Alarm</string>
+    <string name="delete_alarm_confirmation_message">Do you want to delete the alarm?</string>
+    <string name="yes">YES</string>
+    <string name="delete_alarm_confirmation">Successfully deleted alarm.</string>
+    <string name="cancel">Cancel</string>
+    <string name="cancelled_deletion_confirmation">Cancelled deletion</string>
+    <string name="cancelled">Cancelled!</string>
+    <string name="create_alarm">Create Alarm</string>
+    <string name="repeating_alarm_question">Do you want the alarm to repeat?</string>
+    <string name="no">NO</string>
+    <string name="predict">Predict</string>
+    <string name="another_one">Another one</string>
 
 </resources>

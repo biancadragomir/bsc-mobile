@@ -17,7 +17,7 @@ import app.bsc.db.drawing.data.network.NetworkConnectionChecker
 import app.bsc.db.drawing.data.network.UploadAPIs
 import app.bsc.db.drawing.data.prediction.Classifier
 import app.bsc.db.drawing.view.main.MainActivity
-import kotlinx.android.synthetic.main.drawing_layout.*
+import kotlinx.android.synthetic.main.drawing_fragment_layout.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -36,13 +36,22 @@ class DrawFragment : Fragment() {
 
     private val objectCategories = ArrayList(
         Arrays.asList(
-            "Apple", "Banana", "Pineapple", "Pants", "Carrot", "Cup", "Anvil", "Bowtie", "Face", "Hand"
+            "Apple",
+            "Banana",
+            "Pineapple",
+            "Pants",
+            "Carrot",
+            "Cup",
+            "Anvil",
+            "Bowtie",
+            "Face",
+            "Hand"
         )
     )
 
     private val nrObj = objectCategories.size
 
-    private var connectedToNetwork : Boolean = true
+    private var connectedToNetwork: Boolean = true
 
     private fun getRandomObject(): String {
         val randomInteger = (0..(nrObj - 1)).shuffled().first()
@@ -50,10 +59,13 @@ class DrawFragment : Fragment() {
     }
 
     private var objectToDraw: String? = null
-    var reqId = 0
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.drawing_layout, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.drawing_fragment_layout, container, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,27 +74,29 @@ class DrawFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        btnPredict.text = "Predict"
-        btnPredict.setOnClickListener {
-            this.onClick_btnPrediction()
+
+        btnPredictFragment.text = getString(R.string.predict)
+        btnPredictFragment.setOnClickListener {
+            this.predictionButtonOnClick()
             MainActivity.viewPager.setPagingEnabled(true)
         }
 
-        btnAbort.setOnClickListener {
+        btnAbortFragment.setOnClickListener {
             Toast.makeText(context, "Alright!", Toast.LENGTH_SHORT).show()
-            fpv_paint.clear()
+            fpv_paint_fragment.clear()
             objectToDraw = getRandomObject()
-            txtPrediction.text = String.format(getString(R.string.strObjToDraw), objectToDraw)
+            txtPredictionFragment.text =
+                String.format(getString(R.string.strObjToDraw), objectToDraw)
             MainActivity.viewPager.setPagingEnabled(true)
         }
-        btnAbort.text = "Another"
+        btnAbortFragment.text = getString(R.string.another_one)
 
-        drawing_layout.setOnClickListener {
+        drawing_layout_fragment.setOnClickListener {
             MainActivity.viewPager.setPagingEnabled(true)
         }
 
         objectToDraw = getRandomObject()
-        txtPrediction.text = String.format(getString(R.string.strObjToDraw), objectToDraw)
+        txtPredictionFragment.text = String.format(getString(R.string.strObjToDraw), objectToDraw)
     }
 
     private fun init() {
@@ -96,19 +110,19 @@ class DrawFragment : Fragment() {
         }
     }
 
-    private fun onClick_btnPrediction() {
-        if (fpv_paint!!.isEmpty) {
+    private fun predictionButtonOnClick() {
+        if (fpv_paint_fragment.isEmpty) {
             Toast.makeText(context, "Draw something first!", Toast.LENGTH_SHORT).show()
         } else {
 
-            val image = fpv_paint!!.exportToBitmap(
+            val image = fpv_paint_fragment.exportToBitmap(
                 Classifier.IMG_WIDTH, Classifier.IMG_HEIGHT
             )
 
             connectedToNetwork = true
             if (!NetworkConnectionChecker.isNetworkAvailable(context!!)) {
                 connectedToNetwork = false
-            }else{
+            } else {
                 val filePath = saveImageToExternalStorage(image)
                 uploadToServer(filePath)
             }
@@ -125,20 +139,22 @@ class DrawFragment : Fragment() {
                     ).show()
                 }
 
-                if(!connectedToNetwork)
+                if (!connectedToNetwork)
                     Toast.makeText(context, "No internet connection.", Toast.LENGTH_SHORT).show()
 
-                fpv_paint.clear()
+                fpv_paint_fragment.clear()
                 objectToDraw = getRandomObject()
-                txtPrediction.text = String.format(getString(R.string.strObjToDraw), objectToDraw)
+                txtPredictionFragment.text =
+                    String.format(getString(R.string.strObjToDraw), objectToDraw)
             }
         }
     }
 
-    fun saveImageToExternalStorage(finalBitmap: Bitmap): String {
-        val root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString()
+    private fun saveImageToExternalStorage(finalBitmap: Bitmap): String {
+        val root =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString()
 
-        val myDir = File(root + "/snooze")
+        val myDir = File("$root/snooze")
         val myDirCreated = myDir.mkdirs()
         println("My dir created: $myDirCreated")
         val fname = "image.jpg"
@@ -157,32 +173,28 @@ class DrawFragment : Fragment() {
             e.printStackTrace()
         }
 
-
         // Tell the media scanner about the new file so that it is
         // immediately available to the user.
-        MediaScannerConnection.scanFile(this.context, arrayOf(file.toString()), null,
-            object : MediaScannerConnection.OnScanCompletedListener {
-                override fun onScanCompleted(path: String, uri: Uri) {
-                    Log.i("ExternalStorage", "Scanned $path:")
-                    Log.i("ExternalStorage", "-> uri=$uri")
-                }
-            })
+        MediaScannerConnection.scanFile(this.context, arrayOf(file.toString()), null
+        ) { path, uri ->
+            Log.i("ExternalStorage", "Scanned $path:")
+            Log.i("ExternalStorage", "-> uri=$uri")
+        }
 
         return file.absolutePath
     }
 
     private fun imageToString(bitmap: Bitmap): String {
-        var byteArrayOutputStream = ByteArrayOutputStream()
+        val byteArrayOutputStream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
-        var imgByte = byteArrayOutputStream.toByteArray()
+        val imgByte = byteArrayOutputStream.toByteArray()
 
         return android.util.Base64.encodeToString(imgByte, android.util.Base64.DEFAULT)
     }
 
-
     private fun uploadToServer(filePath: String) {
         Log.i(LOG_TAG, "Trying to upload to server...")
-        val retrofit = NetworkClient.getRetrofitClient(context!!)
+        val retrofit = NetworkClient.getRetrofitClient()
 
         val uploadAPIs = retrofit!!.create(UploadAPIs::class.java)
         //Create a file object using file path
@@ -200,13 +212,17 @@ class DrawFragment : Fragment() {
         val call = uploadAPIs.uploadImage(part, description)
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                if(response.body()!=null){
+                if (response.body() != null) {
                     var predictionResultServer = response.body()!!.string().substringAfter(':')
                     predictionResultServer = predictionResultServer.substringAfter('"')
                     predictionResultServer = predictionResultServer.substringBefore('"')
                     Log.i("Retrofit success: ", predictionResultServer)
-                    Toast.makeText(context, "Server result: " + predictionResultServer, Toast.LENGTH_SHORT).show()
-                }else{
+                    Toast.makeText(
+                        context,
+                        "Server result: $predictionResultServer",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
                     Toast.makeText(context, "There's a problem!", Toast.LENGTH_SHORT).show()
                 }
             }

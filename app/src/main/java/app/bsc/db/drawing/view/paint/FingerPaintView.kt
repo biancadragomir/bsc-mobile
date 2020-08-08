@@ -1,23 +1,17 @@
 package app.bsc.db.drawing.view.paint
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import android.graphics.Bitmap
-import android.nfc.Tag
-import android.os.Environment
-import android.util.Log
-import android.widget.Toast
 import app.bsc.db.drawing.view.main.MainActivity
-import java.io.File
-import java.io.FileOutputStream
-
+import kotlin.math.abs
 
 class FingerPaintView(
-        context: Context,
-        attrs: AttributeSet? = null
+    context: Context,
+    attrs: AttributeSet? = null
 ) : View(context, attrs) {
 
     private val path = Path()
@@ -25,9 +19,9 @@ class FingerPaintView(
     private lateinit var drawingCanvas: Canvas
     private val drawingPaint = Paint(Paint.DITHER_FLAG)
     private var penX: Float = 0.toFloat()
-    private var penY:Float = 0.toFloat()
+    private var penY: Float = 0.toFloat()
 
-    var pen: Paint = buildDefaultPen()
+    private var pen: Paint = buildDefaultPen()
     var isEmpty: Boolean = true
         private set
 
@@ -43,6 +37,7 @@ class FingerPaintView(
         canvas?.drawPath(path, pen)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         MainActivity.viewPager.setPagingEnabled(false)
         if (event == null) return false
@@ -69,14 +64,12 @@ class FingerPaintView(
 
     }
 
-    override fun performClick(): Boolean {
-        return super.performClick()
-    }
-
     fun clear() {
         path.reset()
-        drawingBitmap = Bitmap.createBitmap(drawingBitmap.width, drawingBitmap.height,
-                Bitmap.Config.ARGB_8888)
+        drawingBitmap = Bitmap.createBitmap(
+            drawingBitmap.width, drawingBitmap.height,
+            Bitmap.Config.ARGB_8888
+        )
         drawingCanvas = Canvas(drawingBitmap)
         isEmpty = true
         invalidate()
@@ -111,8 +104,8 @@ class FingerPaintView(
     }
 
     private fun onTouchMove(x: Float, y: Float) {
-        val dx = Math.abs(x - penX)
-        val dy = Math.abs(y - penY)
+        val dx = abs(x - penX)
+        val dy = abs(y - penY)
         if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
             path.quadTo(penX, penY, (x + penX) / 2, (y + penY) / 2)
             penX = x
