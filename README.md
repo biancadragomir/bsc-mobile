@@ -63,3 +63,5 @@ use case diagram from Figure 4.13. As mentioned before, the user can add or remo
 view them and, of course, draw something to make an alarm stop ringing, as well as freely
 experiment with the drawing feature. Also, in Figure 4.14 I presented the interactions that happen between the user and the components of the application when a new alarm is added.
 
+© 2019 Bianca Dragomir.  All rights reserved.
+
