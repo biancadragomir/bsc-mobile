@@ -70,21 +70,21 @@ class DBHelper(context: Context) : SQLiteOpenHelper(
         values.put(COL_DAILY, alarm.daily)
 
         db.insert(TABLE_NAME, null, values)
-        Log.i("DBHelper: ", "added alarm with req id = " + alarm.reqId.toString())
+        Log.i(TAG, "Added alarm with ID ${alarm.reqId}")
         db.close()
     }
 
     fun deleteAlarm(alarm: Alarm) {
         val db = this.writableDatabase
         db.delete(TABLE_NAME, "$COL_REQ_ID=?", arrayOf(alarm.reqId.toString()))
-        Log.i("DBHelper: ", "deleted alarm with req id = " + alarm.reqId.toString())
+        Log.i(TAG, "Deleted alarm with ID ${alarm.reqId}")
         db.close()
     }
 
     fun deleteAlarmById(reqId: Int) {
         val db = this.writableDatabase
         db.delete(TABLE_NAME, "$COL_REQ_ID=?", arrayOf(reqId.toString()))
-        Log.i("DBHelper: ", "deleted alarm with req id = " + reqId)
+        Log.i(TAG, "Deleted alarm with ID $reqId")
         db.close()
     }
 
@@ -101,8 +101,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(
         if (cursor.moveToFirst())
             id = cursor.getInt(cursor.getColumnIndex(COL_REQ_ID))
         cursor.close()
-//        id += 1
-        Log.i(TAG, "increased ID value => id is " + id)
+        Log.i(TAG, "Maximum database ID: $id")
         return id
     }
 }

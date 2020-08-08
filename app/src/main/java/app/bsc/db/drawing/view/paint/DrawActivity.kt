@@ -9,49 +9,43 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import app.bsc.db.drawing.R
 import app.bsc.db.drawing.data.prediction.Classifier
-import app.bsc.db.drawing.data.prediction.Result
 import app.bsc.db.drawing.view.alarms.CreateAlarmFragment
-import app.bsc.db.drawing.view.main.MainActivity
 import app.bsc.db.drawing.view.alarms.ViewAlarmsFragment
 import app.bsc.db.drawing.view.alarms.ViewRefreshListener
+import app.bsc.db.drawing.view.main.MainActivity
 import butterknife.ButterKnife
 import kotlinx.android.synthetic.main.drawing_layout.*
-
 import java.io.IOException
 import java.util.*
 
-class DrawActivity (): AppCompatActivity() {
+class DrawActivity() : AppCompatActivity() {
     private var mclassifier: Classifier? = null
 
     var mTxtPrediction: TextView? = null
     var mFpvPaint: FingerPaintView? = null
 
-//    private val objectCategories = ArrayList(Arrays.asList("Bat", "Bear", "Bee", "Bird",
-//        "Butterfly", "Camel", "Cat", "Dog",
-//        "Dolphin", "Dragon", "Duck", "Elephant",
-//        "Flamingo", "Fish", "Hedgehog", "Horse",
-//        "Kangaroo", "Monkey", "Mosquito", "Octopus",
-//        "Parrot", "Penguin", "Pig", "Rabbit",
-//        "Raccoon", "Rhinoceros", "Scorpion", "Sheep",
-//        "Snail", "Snake", "Spider", "Zebra"))
-
-
-//        private val objectCategories = ArrayList(Arrays.asList(
-//             "Carrot",  "Cloud",  "Dog",
-//    "Mushroom",  "Pants",  "Penguin", "Pillow",
-//     "Snake", "Spider", "Stitches", "Table",
-//    "Tooth", "Triangle",  "Vase", "Zigzag"))
-
-
-    private val objectCategories = ArrayList(Arrays.asList(
-        "Apple", "Banana",  "Pineapple", "Pants", "Carrot", "Cup",  "Anvil",  "Bowtie", "Face", "Hand" ))
+    private val objectCategories = ArrayList(
+        Arrays.asList(
+            "Apple",
+            "Banana",
+            "Pineapple",
+            "Pants",
+            "Carrot",
+            "Cup",
+            "Anvil",
+            "Bowtie",
+            "Face",
+            "Hand"
+        )
+    )
 
     private val nrObj = objectCategories.size
 
-    private fun getRandomObject(): String{
-        val randomInteger = (0..(nrObj-1)).shuffled().first()
+    private fun getRandomObject(): String {
+        val randomInteger = (0..(nrObj - 1)).shuffled().first()
         return this.objectCategories[randomInteger]
     }
+
     var objectToDraw: String? = null
     var reqId = 0
     var isDaily: Int = 0
@@ -63,9 +57,9 @@ class DrawActivity (): AppCompatActivity() {
 
         isDaily = intent.getIntExtra("daily", 0)
 
-        Log.i(LOG_TAG, "The req id to delete is " + reqId)
+        Log.i(LOG_TAG, "The alarm to be deleted has ID $reqId")
 
-        if(isDaily == 0){
+        if (isDaily == 0) {
             ViewAlarmsFragment.deleteAlarm(reqId)
             viewRefreshListener!!.updateView()
         }
@@ -79,7 +73,7 @@ class DrawActivity (): AppCompatActivity() {
             MainActivity.viewPager.setPagingEnabled(true)
         }
 
-        val mBtnAbort= findViewById<Button>(R.id.btnAbort)
+        val mBtnAbort = findViewById<Button>(R.id.btnAbort)
         mBtnAbort.setOnClickListener {
             finish()
             CreateAlarmFragment.AlarmReceiver.stopAlarmRinging()
@@ -108,30 +102,30 @@ class DrawActivity (): AppCompatActivity() {
         }
     }
 
-    private fun renderResult(result: Result) {
-        mTxtPrediction!!.text = objectCategories[result.number]
-        println(objectCategories[result.number])
-    }
-
     private fun onClick_btnPrediction() {
-        if(mFpvPaint!!.isEmpty){
+        if (mFpvPaint!!.isEmpty) {
             Toast.makeText(this, "Draw something first!", Toast.LENGTH_SHORT).show()
-        }else{
+        } else {
             val image = mFpvPaint!!.exportToBitmap(
-                Classifier.IMG_WIDTH, Classifier.IMG_HEIGHT)
+                Classifier.IMG_WIDTH, Classifier.IMG_HEIGHT
+            )
 
-            if(mclassifier!=null){
+            if (mclassifier != null) {
                 val result = this.mclassifier!!.classify(image)
-//                renderResult(result)
-                if(objectCategories[result.number] == objectToDraw){
+                if (objectCategories[result.number] == objectToDraw) {
                     CreateAlarmFragment.AlarmReceiver.stopAlarmRinging()
                     Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show()
                     finish()
-                }else{
-                    Toast.makeText(this, "Recognized: " + objectCategories[result.number] + ". Try again!", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(
+                        this,
+                        "Recognized: " + objectCategories[result.number] + ". Try again!",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     fpv_paint.clear()
                     objectToDraw = getRandomObject()
-                    txtPrediction.text = String.format(getString(R.string.strObjToDraw), objectToDraw)
+                    txtPrediction.text =
+                        String.format(getString(R.string.strObjToDraw), objectToDraw)
                 }
             }
         }
