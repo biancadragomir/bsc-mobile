@@ -12,7 +12,7 @@ The reason why I decided to create an Android Application is that Android is con
 to be the most used operating system in the world, more and more people deciding to buy an
 Android-powered device over other alternatives.
 
-![Class diagram](https://i.imgur.com/a/9ripYrX.jpg)
+![Class diagram](https://i.imgur.com/5oWjavB.jpg)
 
 ### 4.4.1 Kotlin
 There are several reasons why I decided to use the Kotlin programming language for developing the Android app.
