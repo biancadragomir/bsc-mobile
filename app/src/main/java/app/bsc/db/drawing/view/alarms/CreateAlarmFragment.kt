@@ -46,16 +46,16 @@ class CreateAlarmFragment : Fragment() {
 
             val builder = AlertDialog.Builder(context!!)
 
-            builder.setTitle("Create Alarm")
+            builder.setTitle(getString(R.string.create_alarm))
 
-            builder.setMessage("Do you want the alarm to repeat?")
+            builder.setMessage(getString(R.string.repeating_alarm_question))
 
-            builder.setNegativeButton("NO") { _, _ ->
+            builder.setNegativeButton(getString(R.string.no)) { _, _ ->
                 this.dailyAlarm = 0
                 createAlarm()
             }
 
-            builder.setPositiveButton("YES") { _, _ ->
+            builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
                 this.dailyAlarm = 1
                 createAlarm()
             }
@@ -125,12 +125,21 @@ class CreateAlarmFragment : Fragment() {
         if (viewRefreshListener != null)
             viewRefreshListener!!.updateView()
         else
-            Toast.makeText(context, "Could not refresh alarms!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.refresh_alarms_failure), Toast.LENGTH_SHORT)
+                .show()
 
-        if (dailyAlarm == 1)
-            Toast.makeText(activity, "Created daily alarm!", Toast.LENGTH_SHORT).show()
-        else
-            Toast.makeText(activity, "Created one time alarm!", Toast.LENGTH_SHORT).show()
+        if (dailyAlarm == 1) {
+            Toast.makeText(
+                activity,
+                getString(R.string.daily_alarm_confirmation),
+                Toast.LENGTH_SHORT
+            ).show()
+        } else
+            Toast.makeText(
+                activity,
+                getString(R.string.one_time_alarm_confirmation),
+                Toast.LENGTH_SHORT
+            ).show()
     }
 
     private fun addAlarmToDb(alarmObj: Alarm) {
@@ -162,20 +171,19 @@ class CreateAlarmFragment : Fragment() {
             }
             ringtone!!.play()
 
-            var id = intent.getIntExtra("requestId", -2)
+            val id = intent.getIntExtra("requestId", -2)
             val dailyStatus = intent.getIntExtra("daily", 0)
 
-            val fpvIntent = Intent(context, DrawActivity::class.java)
-            fpvIntent.putExtra("requestId", id)
-            fpvIntent.putExtra("lock", true)
-            fpvIntent.putExtra("daily", dailyStatus)
-
-            fpvIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            val fpvIntent = Intent(context, DrawActivity::class.java).apply {
+                putExtra("requestId", id)
+                putExtra("lock", true)
+                putExtra("daily", dailyStatus)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
 
             context.startActivity(fpvIntent)
 
             viewRefreshListener!!.updateView()
-
         }
     }
 }

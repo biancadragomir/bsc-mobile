@@ -19,13 +19,13 @@ import java.io.IOException
 import java.util.*
 
 class DrawActivity() : AppCompatActivity() {
-    private var mclassifier: Classifier? = null
+    private var classifier: Classifier? = null
 
-    var mTxtPrediction: TextView? = null
-    var mFpvPaint: FingerPaintView? = null
+    private var textPredictionTextView: TextView? = null
+    var fpvPaint: FingerPaintView? = null
 
     private val objectCategories = ArrayList(
-        Arrays.asList(
+        listOf(
             "Apple",
             "Banana",
             "Pineapple",
@@ -42,7 +42,7 @@ class DrawActivity() : AppCompatActivity() {
     private val nrObj = objectCategories.size
 
     private fun getRandomObject(): String {
-        val randomInteger = (0..(nrObj - 1)).shuffled().first()
+        val randomInteger = (0 until nrObj).shuffled().first()
         return this.objectCategories[randomInteger]
     }
 
@@ -64,12 +64,12 @@ class DrawActivity() : AppCompatActivity() {
             viewRefreshListener!!.updateView()
         }
 
-        this.mFpvPaint = findViewById(R.id.fpv_paint) as FingerPaintView
-        this.mTxtPrediction = findViewById(R.id.txtPrediction)
+        this.fpvPaint = findViewById(R.id.fpv_paint) as FingerPaintView
+        this.textPredictionTextView = findViewById(R.id.txtPrediction)
 
         val mBtnPredict = findViewById<Button>(R.id.btnPredict)
         mBtnPredict.setOnClickListener {
-            this.onClick_btnPrediction()
+            this.predictButtonOnClick()
             MainActivity.viewPager.setPagingEnabled(true)
         }
 
@@ -77,7 +77,7 @@ class DrawActivity() : AppCompatActivity() {
         mBtnAbort.setOnClickListener {
             finish()
             CreateAlarmFragment.AlarmReceiver.stopAlarmRinging()
-            Toast.makeText(this, "Cancelled!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.cancelled), Toast.LENGTH_SHORT).show()
             MainActivity.viewPager.setPagingEnabled(true)
         }
 
@@ -94,7 +94,7 @@ class DrawActivity() : AppCompatActivity() {
     private fun init() {
 
         try {
-            mclassifier = Classifier(this)
+            classifier = Classifier(this)
         } catch (e: IOException) {
             Toast.makeText(this, "Could not instantiate classifier.", Toast.LENGTH_LONG).show()
             Log.e(LOG_TAG, "init(): Failed to create Classifier", e)
@@ -102,16 +102,16 @@ class DrawActivity() : AppCompatActivity() {
         }
     }
 
-    private fun onClick_btnPrediction() {
-        if (mFpvPaint!!.isEmpty) {
+    private fun predictButtonOnClick() {
+        if (fpvPaint!!.isEmpty) {
             Toast.makeText(this, "Draw something first!", Toast.LENGTH_SHORT).show()
         } else {
-            val image = mFpvPaint!!.exportToBitmap(
+            val image = fpvPaint!!.exportToBitmap(
                 Classifier.IMG_WIDTH, Classifier.IMG_HEIGHT
             )
 
-            if (mclassifier != null) {
-                val result = this.mclassifier!!.classify(image)
+            if (classifier != null) {
+                val result = this.classifier!!.classify(image)
                 if (objectCategories[result.number] == objectToDraw) {
                     CreateAlarmFragment.AlarmReceiver.stopAlarmRinging()
                     Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show()

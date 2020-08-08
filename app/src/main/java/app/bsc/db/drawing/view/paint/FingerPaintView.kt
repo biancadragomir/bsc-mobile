@@ -1,5 +1,6 @@
 package app.bsc.db.drawing.view.paint
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
@@ -36,6 +37,7 @@ class FingerPaintView(
         canvas?.drawPath(path, pen)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         MainActivity.viewPager.setPagingEnabled(false)
         if (event == null) return false

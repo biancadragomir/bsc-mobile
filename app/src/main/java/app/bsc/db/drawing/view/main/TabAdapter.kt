@@ -6,26 +6,26 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import java.util.*
 
 class TabAdapter internal constructor(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
-    private val mFragmentList = ArrayList<Fragment>()
-    private val mFragmentTitleList = ArrayList<String>()
+    private val fragmentList = ArrayList<Fragment>()
+    private val fragmentTitleList = ArrayList<String>()
     override fun getItem(position: Int): Fragment {
         if (position == 3)
             MainActivity.viewPager.setPagingEnabled(false)
         else
             MainActivity.viewPager.setPagingEnabled(true)
-        return mFragmentList[position]
+        return fragmentList[position]
     }
 
     fun addFragment(fragment: Fragment, title: String) {
-        mFragmentList.add(fragment)
-        mFragmentTitleList.add(title)
+        fragmentList.add(fragment)
+        fragmentTitleList.add(title)
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
-        return mFragmentTitleList[position]
+        return fragmentTitleList[position]
     }
 
     override fun getCount(): Int {
-        return mFragmentList.size
+        return fragmentList.size
     }
 }

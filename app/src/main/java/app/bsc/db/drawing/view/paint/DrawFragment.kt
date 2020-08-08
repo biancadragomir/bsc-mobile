@@ -75,9 +75,9 @@ class DrawFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        btnPredictFragment.text = "Predict"
+        btnPredictFragment.text = getString(R.string.predict)
         btnPredictFragment.setOnClickListener {
-            this.onClick_btnPrediction()
+            this.predictionButtonOnClick()
             MainActivity.viewPager.setPagingEnabled(true)
         }
 
@@ -89,7 +89,7 @@ class DrawFragment : Fragment() {
                 String.format(getString(R.string.strObjToDraw), objectToDraw)
             MainActivity.viewPager.setPagingEnabled(true)
         }
-        btnAbortFragment.text = "Another one"
+        btnAbortFragment.text = getString(R.string.another_one)
 
         drawing_layout_fragment.setOnClickListener {
             MainActivity.viewPager.setPagingEnabled(true)
@@ -110,7 +110,7 @@ class DrawFragment : Fragment() {
         }
     }
 
-    private fun onClick_btnPrediction() {
+    private fun predictionButtonOnClick() {
         if (fpv_paint_fragment.isEmpty) {
             Toast.makeText(context, "Draw something first!", Toast.LENGTH_SHORT).show()
         } else {
@@ -175,29 +175,26 @@ class DrawFragment : Fragment() {
 
         // Tell the media scanner about the new file so that it is
         // immediately available to the user.
-        MediaScannerConnection.scanFile(this.context, arrayOf(file.toString()), null,
-            object : MediaScannerConnection.OnScanCompletedListener {
-                override fun onScanCompleted(path: String, uri: Uri) {
-                    Log.i("ExternalStorage", "Scanned $path:")
-                    Log.i("ExternalStorage", "-> uri=$uri")
-                }
-            })
+        MediaScannerConnection.scanFile(this.context, arrayOf(file.toString()), null
+        ) { path, uri ->
+            Log.i("ExternalStorage", "Scanned $path:")
+            Log.i("ExternalStorage", "-> uri=$uri")
+        }
 
         return file.absolutePath
     }
 
     private fun imageToString(bitmap: Bitmap): String {
-        var byteArrayOutputStream = ByteArrayOutputStream()
+        val byteArrayOutputStream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
-        var imgByte = byteArrayOutputStream.toByteArray()
+        val imgByte = byteArrayOutputStream.toByteArray()
 
         return android.util.Base64.encodeToString(imgByte, android.util.Base64.DEFAULT)
     }
 
-
     private fun uploadToServer(filePath: String) {
         Log.i(LOG_TAG, "Trying to upload to server...")
-        val retrofit = NetworkClient.getRetrofitClient(context!!)
+        val retrofit = NetworkClient.getRetrofitClient()
 
         val uploadAPIs = retrofit!!.create(UploadAPIs::class.java)
         //Create a file object using file path
@@ -222,7 +219,7 @@ class DrawFragment : Fragment() {
                     Log.i("Retrofit success: ", predictionResultServer)
                     Toast.makeText(
                         context,
-                        "Server result: " + predictionResultServer,
+                        "Server result: $predictionResultServer",
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {

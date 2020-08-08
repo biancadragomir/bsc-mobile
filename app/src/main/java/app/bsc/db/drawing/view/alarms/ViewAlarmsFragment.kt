@@ -97,7 +97,7 @@ class ViewAlarmsFragment : Fragment(),
         refreshData()
     }
 
-    fun cancelIntent(reqId: Int) {
+    private fun cancelIntent(reqId: Int) {
         val intent = Intent(context, CreateAlarmFragment.AlarmReceiver::class.java)
         val pendingIntent =
             PendingIntent.getBroadcast(context, reqId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
@@ -112,24 +112,32 @@ class ViewAlarmsFragment : Fragment(),
     override fun onClick(position: Int) {
         val builder = AlertDialog.Builder(context!!)
 
-        builder.setTitle("Delete Alarm")
+        builder.setTitle(getString(R.string.delete_alarm))
 
-        builder.setMessage("Do you want to delete the alarm?")
+        builder.setMessage(getString(R.string.delete_alarm_confirmation_message))
 
-        builder.setPositiveButton("YES") { _, _ ->
+        builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
 
             cancelIntent(alarmsList[position].reqId)
 
             doDeleteActions(alarmsList[position])
 
-            Toast.makeText(context, "Successfully deleted alarm.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                getString(R.string.delete_alarm_confirmation),
+                Toast.LENGTH_SHORT
+            ).show()
 
             refreshData()
         }
 
-        builder.setNeutralButton("CANCEL") { _, _ ->
+        builder.setNeutralButton(getString(R.string.cancel)) { _, _ ->
             // Do something when user press the positive button
-            Toast.makeText(context, "Cancelled deletion", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                getString(R.string.cancelled_deletion_confirmation),
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
         val dialog: AlertDialog = builder.create()

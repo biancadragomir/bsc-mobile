@@ -11,37 +11,36 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
-import java.util.*
 
 class Classifier @Throws(IOException::class)
 constructor(activity: Activity) {
 
     private val options = Interpreter.Options()
-    private val mInterpreter: Interpreter
-    private val mImageData: ByteBuffer
-    private val mImagePixels = IntArray(IMG_HEIGHT * IMG_WIDTH)
-    private val mResult = Array(1) { FloatArray(NUM_CLASSES) }
+    private val interpreter: Interpreter
+    private val imageData: ByteBuffer
+    private val imagePixels = IntArray(IMG_HEIGHT * IMG_WIDTH)
+    private val result = Array(1) { FloatArray(NUM_CLASSES) }
 
     init {
-        mInterpreter = Interpreter(loadModelFile(activity), options)
-        mImageData = ByteBuffer.allocateDirect(
+        interpreter = Interpreter(loadModelFile(activity), options)
+        imageData = ByteBuffer.allocateDirect(
             4 * BATCH_SIZE * IMG_HEIGHT * IMG_WIDTH * NUM_CHANNEL
         )
-        mImageData.order(ByteOrder.nativeOrder())
+        imageData.order(ByteOrder.nativeOrder())
     }
 
     fun classify(bitmap: Bitmap): Result {
         convertBitmapToByteBuffer(bitmap)
         val startTime = SystemClock.uptimeMillis()
-        mInterpreter.run(mImageData, mResult)
+        interpreter.run(imageData, result)
         val endTime = SystemClock.uptimeMillis()
         val timeCost = endTime - startTime
         Log.v(
-            LOG_TAG, "classify(): result = " + mResult[0].contentToString()
+            LOG_TAG, "classify(): result = " + result[0].contentToString()
                     + ", timeCost = " + timeCost
         )
 
-        return Result(mResult[0], timeCost)
+        return Result(result[0], timeCost)
     }
 
     @Throws(IOException::class)
@@ -55,26 +54,23 @@ constructor(activity: Activity) {
     }
 
     private fun convertBitmapToByteBuffer(bitmap: Bitmap) {
-        if (mImageData == null) {
-            return
-        }
 
-        mImageData.rewind()
+        imageData.rewind()
         bitmap.getPixels(
-            mImagePixels,
+            imagePixels,
             0,
             bitmap.width,
             0,
             0,
             bitmap.width,
             bitmap.height
-        );
+        )
 
         var pixel = 0
         for (i in 0 until IMG_WIDTH) {
             for (j in 0 until IMG_HEIGHT) {
-                val value = mImagePixels[pixel++]
-                mImageData.putFloat(convertPixel(value))
+                val value = imagePixels[pixel++]
+                imageData.putFloat(convertPixel(value))
             }
         }
     }

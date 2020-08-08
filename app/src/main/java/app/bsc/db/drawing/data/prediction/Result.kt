@@ -3,7 +3,7 @@ package app.bsc.db.drawing.data.prediction
 class Result(probs: FloatArray, val timeCost: Long) {
 
     val number: Int
-    val probability: Float
+    private val probability: Float
 
     init {
         number = argmax(probs)

@@ -1,5 +1,6 @@
 package app.bsc.db.drawing.view.alarms
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,38 +12,26 @@ import app.bsc.db.drawing.model.Alarm
 import java.util.*
 
 class AlarmsRecyclerAdapter(
-    private val myDataset: ArrayList<Alarm>,
+    myDataset: ArrayList<Alarm>,
     onItemClickListener: OnItemClickListener
 ) :
     RecyclerView.Adapter<AlarmsRecyclerAdapter.AlarmsViewHolder>() {
 
-    var currentDataset: ArrayList<Alarm>
+    private var currentDataset: ArrayList<Alarm> = myDataset
 
-    var mOnItemClickListener: OnItemClickListener
-
-    init {
-        currentDataset = myDataset
-        mOnItemClickListener = onItemClickListener
-    }
+    private var itemClickListener: OnItemClickListener = onItemClickListener
 
     interface OnItemClickListener {
         fun onClick(position: Int)
     }
 
-    class AlarmsViewHolder(itemView: View, onItemClickListener: OnItemClickListener) :
+    class AlarmsViewHolder(itemView: View, private var onItemClickListener: OnItemClickListener) :
         RecyclerView.ViewHolder(itemView), View.OnClickListener {
-        var itemTitle: TextView
-        var itemDailyStatus: TextView
-
-        var onItemClickListener: OnItemClickListener
+        var itemTitle: TextView = itemView.findViewById(R.id.item_title)
+        var itemDailyStatus: TextView = itemView.findViewById(R.id.item_detail)
 
         init {
-            itemTitle = itemView.findViewById(R.id.item_title)
-            itemDailyStatus = itemView.findViewById(R.id.item_detail)
-
-            this.onItemClickListener = onItemClickListener
             itemView.setOnClickListener(this)
-
         }
 
         override fun onClick(v: View?) {
@@ -59,10 +48,11 @@ class AlarmsRecyclerAdapter(
 
         return AlarmsViewHolder(
             cardView,
-            mOnItemClickListener
+            itemClickListener
         )
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: AlarmsViewHolder, position: Int) {
         holder.itemTitle.text =
             "${currentDataset[position].hour} : ${currentDataset[position].minute}"
